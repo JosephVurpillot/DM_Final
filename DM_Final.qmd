@@ -17,3 +17,11 @@ library(vroom)
 here::i_am("DM_Final.Rproj")
 ```
 
+# Data importation
+
+## EPA Data
+
+```{r}
+pollution <- vroom(here("data", "annual_conc_by_monitor_2024.csv"))
+```
+
