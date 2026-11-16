@@ -4,3 +4,10 @@ author: "Dylan Pelloquin and Joseph Vurpillot"
 format: html
 ---
 
+# Packages and librairies
+
+```{r}
+library(here)
+library(vroom)
+```
+
