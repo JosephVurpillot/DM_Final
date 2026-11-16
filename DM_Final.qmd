@@ -11,3 +11,9 @@ library(here)
 library(vroom)
 ```
 
+# Here configuration
+
+```{r}
+here::i_am("DM_Final.Rproj")
+```
+
