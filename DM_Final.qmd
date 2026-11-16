@@ -25,3 +25,13 @@ here::i_am("DM_Final.Rproj")
 pollution <- vroom(here("data", "annual_conc_by_monitor_2024.csv"))
 ```
 
+## ACS Data
+
+```{r}
+edaucation <- vroom(here("data", "education.csv"))
+employment <- vroom(here("data", "employment.csv"))
+ethnicity <- vroom(here("data", "ethnicity.csv"))
+median_income <- vroom(here("data", "median_income.csv"))
+population <- vroom(here("data", "population.csv"))
+```
+
