@@ -116,3 +116,60 @@ population <- cleaning_ACS(population) |>
   select(!4) #full of NA
 ```
 
+# Description of the data
+
+## EPA Data
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(pollution)` |
+| Number of columns | `{r} ncol(pollution)` |
+
+: Basic information about pollution EPA data
+
+## ACS Data
+
+### Education
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(education)` |
+| Number of columns | `{r} ncol(education)` |
+
+: Basic information about education ACS data
+
+### Employment
+
+|                   |                        |
+|-------------------|------------------------|
+| Number of rows    | `{r} nrow(employment)` |
+| Number of columns | `{r} ncol(employment)` |
+
+: Basic information about employment ACS data
+
+### Ethnicity
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(ethnicity)` |
+| Number of columns | `{r} ncol(ethnicity)` |
+
+: Basic information about education ACS data
+
+### Median income
+
+|                   |                           |
+|-------------------|---------------------------|
+| Number of rows    | `{r} nrow(median_income)` |
+| Number of columns | `{r} ncol(median_income)` |
+
+: Basic information about median income ACS data
+
+###  Population
+
+|                   |                        |
+|-------------------|------------------------|
+| Number of rows    | `{r} nrow(population)` |
+| Number of columns | `{r} ncol(population)` |
+
+: Basic information about population ACS data
