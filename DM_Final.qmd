@@ -9,6 +9,9 @@ format: html
 ```{r}
 library(here)
 library(vroom)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 ```
 
 # Here configuration
