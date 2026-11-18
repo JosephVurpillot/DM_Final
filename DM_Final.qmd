@@ -9,6 +9,9 @@ format: html
 ```{r}
 library(here)
 library(vroom)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 ```
 
 # Here configuration
@@ -22,36 +25,153 @@ here::i_am("DM_Final.Rproj")
 ## EPA Data
 
 ```{r}
-pollution <- vroom(here("data", "annual_conc_by_monitor_2024.csv"))
+#| message: false
+#| warning: false
+pollution <- vroom(here("data", "annual_conc_by_monitor_2024.csv"),
+                   col_types = cols(`State Code` = col_integer(),
+                                    `County Code` = col_integer(),
+                                    `Site Num` = col_integer(),
+                                    `Parameter Code` = col_integer(),
+                                    POC = col_integer(),
+                                    Latitude = col_double(),
+                                    Longitude = col_double(),
+                                    Datum = col_factor(c("WGS84", "NAD83")),
+                                    `Parameter Name` = col_character(),
+                                    `Sample Duration` = col_character(),
+                                    `Pollutant Standard` = col_character(),
+                                    `Metric Used` = col_character(),
+                                    `Method Name` = col_character(),
+                                    Year = col_integer(),
+                                    `Units of Measure` = col_character(),
+                                    `Event Type` = col_character(),
+                                    `Observation Count` = col_integer(),
+                                    `Observation Percent` = col_double(),
+                                    `Completeness Indicator` = col_factor(c("Y", "N")),
+                                    `Valid Day Count` = col_integer(),
+                                    `Required Day Count` = col_integer(),
+                                    `Exceptional Data Count` = col_integer(),
+                                    `Null Data Count` = col_integer(),
+                                    `Primary Exceedance Count` = col_integer(),
+                                    `Secondary Exceedance Count` = col_integer(),
+                                    `Certification Indicator` = col_character(),
+                                    `Num Obs Below MDL` = col_double(),
+                                    `Arithmetic Mean` = col_double(),
+                                    `Arithmetic Standard Dev` = col_double(),
+                                    `1st Max Value` = col_double(),
+                                    `1st Max DateTime` = col_datetime(format = ""),
+                                    `2nd Max Value` = col_double(),
+                                    `2nd Max DateTime` = col_datetime(format = ""),
+                                    `3rd Max Value` = col_double(),
+                                    `3rd Max DateTime` = col_datetime(format = ""),
+                                    `4th Max Value` = col_double(),
+                                    `4th Max DateTime` = col_datetime(format = ""),
+                                    `1st Max Non Overlapping Value` = col_logical(),
+                                    `1st NO Max DateTime` = col_logical(),
+                                    `2nd Max Non Overlapping Value` = col_logical(),
+                                    `2nd NO Max DateTime` = col_logical(),
+                                    `99th Percentile` = col_double(),
+                                    `98th Percentile` = col_double(),
+                                    `95th Percentile` = col_double(),
+                                    `90th Percentile` = col_double(),
+                                    `75th Percentile` = col_double(),
+                                    `50th Percentile` = col_double(),
+                                    `10th Percentile` = col_double(),
+                                    `Local Site Name` = col_character(),
+                                    Address = col_character(),
+                                    `State Name` = col_character(),
+                                    `County Name` = col_character(),
+                                    `City Name` = col_character(),
+                                    `CBSA Name` = col_character(),
+                                    `Date of Last Change` = col_date(format = ""),
+                                    .delim = ","))
+pollution <- pollution |>
+  select(!38:41) #full NA
 ```
 
 ## ACS Data
 
 ```{r}
+
+#| message: false
+#| warning: false
 education <- vroom(here("data", "education.csv"))
 employment <- vroom(here("data", "employment.csv"))
 ethnicity <- vroom(here("data", "ethnicity.csv"))
 median_income <- vroom(here("data", "median_income.csv"))
 population <- vroom(here("data", "population.csv"))
+
+cleaning_ACS <- function(df){
+  names(df)[2:ncol(df)] <- as.character(df[1, 2:ncol(df)])
+  df <- df[-1, ] #explicit title is in line 1
+  df <- df[, -ncol(df)] #always full of NA
+  df[3:ncol(df)] <- lapply(df[3:ncol(df)], as.integer) #integer type for every column but 1 & 2
+  df
+}
+
+education <- cleaning_ACS(education)
+employment <- cleaning_ACS(employment)
+ethnicity <- cleaning_ACS(ethnicity) |>
+  select(!4) #full of NA
+median_income <- cleaning_ACS(median_income)
+population <- cleaning_ACS(population) |>
+  select(!4) #full of NA
 ```
-## Links to the Sources 
-
-Be aware that we purposefully only picked the data series from 2024 even though a longer period was available for the ACS dataset because it's the most recent we have and because the EPA data is only available for 2024.
-
-* EPA DATA : https://aqs.epa.gov/aqsweb/airdata/annual_conc_by_monitor_2024.zip
-
-Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
-
-* ACS DATA : - population: https://data.census.gov/table/ACSDT1Y2024.B01003?q=B01003&g=010XX00US$0500000
-- employment: https://data.census.gov/table/ACSDT1Y2024.B23025?q=B23025&g=010XX00US$0500000
-- education: https://data.census.gov/table/ACSDT1Y2024.B15003?q=B15003&g=010XX00US$0500000
-- median income: https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&g=010XX00US$0500000
-- ethnicity: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US$0500000
-
-The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. 
-
-The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and  is of the most reliable information source about societey characteristics in America.
 
 
+# Description of the data
 
+## EPA Data
 
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(pollution)` |
+| Number of columns | `{r} ncol(pollution)` |
+
+: Basic information about pollution EPA data
+
+## ACS Data
+
+### Education
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(education)` |
+| Number of columns | `{r} ncol(education)` |
+
+: Basic information about education ACS data
+
+### Employment
+
+|                   |                        |
+|-------------------|------------------------|
+| Number of rows    | `{r} nrow(employment)` |
+| Number of columns | `{r} ncol(employment)` |
+
+: Basic information about employment ACS data
+
+### Ethnicity
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(ethnicity)` |
+| Number of columns | `{r} ncol(ethnicity)` |
+
+: Basic information about education ACS data
+
+### Median income
+
+|                   |                           |
+|-------------------|---------------------------|
+| Number of rows    | `{r} nrow(median_income)` |
+| Number of columns | `{r} ncol(median_income)` |
+
+: Basic information about median income ACS data
+
+### Population
+
+|                   |                        |
+|-------------------|------------------------|
+| Number of rows    | `{r} nrow(population)` |
+| Number of columns | `{r} ncol(population)` |
+
+: Basic information about population ACS data
