@@ -39,6 +39,21 @@ The first dataset about pollution per counties in the United States, was publish
 
 The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about societey characteristics in America.
 
+## Variables
+
+Median household income in the past 12 months (inflation adjusted dollars) : This is a quite explicit variable, it’s a very straightforward way to measure wealth in each county and we picked it over mean because it is not skewed  by high incomes. One limit is that there are margins of error because these are survey data (note that the margins of error rarely exceed 10 000usd for annual income).
+
+Unemployment rate : This is a variable we’re going to compute manually (dividing the unemployed population over the total labor force of the county), it’s another very useful measure and we could observe if there exists higher or lower exposition to pollution when the county is more or less employed. This also interesting because maybe some counties are more industrial and have higher employment rate but also higher pollution exposition.
+
+Ozone measured with arithmetic mean of 8hour average  2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it’s the widest pollutant measured on  monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from vehicles and industry . We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
+
+Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 900 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m^3.
+
+The last variable about air pollution is Nitrogen dioxide in parts per billion, we will also measure it with its annual arithmetic mean. It comes mainly from road traffic and is concentrated in dense urban areas. That makes it the pollutant most directly tied to where people live and work, and the one most often used in environmental justice research. It also contributes to forming PM2.5 and ozone. This variable is less captured by monitors but it still very impactful so we want to keep 
+
+
+
+
 # Data importation
 
 ## EPA Data
