@@ -115,108 +115,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stderr">
 <pre><code>here() starts at /Users/dylanpelloquin/Desktop/Data managment/Final Project</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vroom)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vroom)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.5.2</code></pre>
+</div>
 </div>
 </section>
 <section id="here-configuration" class="level1">
 <h1>Here configuration</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">i_am</span>(<span class="st">"DM_Final.Rproj"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">i_am</span>(<span class="st">"DM_Final.Rproj"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>here() starts at /Users/dylanpelloquin/Desktop/Data managment/Final Project</code></pre>
 </div>
 </div>
-</section>
-<section id="data-importation" class="level1">
-<h1>Data importation</h1>
-<section id="epa-data" class="level2">
-<h2 class="anchored" data-anchor-id="epa-data">EPA Data</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pollution <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"annual_conc_by_monitor_2024.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
-e.g.:
-  dat &lt;- vroom(...)
-  problems(dat)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 68956 Columns: 55
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (19): State Code, County Code, Site Num, Datum, Parameter Name, Sample ...
-dbl  (27): Parameter Code, POC, Latitude, Longitude, Year, Observation Count...
-lgl   (4): 1st Max Non Overlapping Value, 1st NO Max DateTime, 2nd Max Non O...
-dttm  (4): 1st Max DateTime, 2nd Max DateTime, 3rd Max DateTime, 4th Max Dat...
-date  (1): Date of Last Change
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-</div>
-</section>
-<section id="acs-data" class="level2">
-<h2 class="anchored" data-anchor-id="acs-data">ACS Data</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>education <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"education.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 862 Columns: 53
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(52): GEO_ID, NAME, B15003_001E, B15003_001M, B15003_002E, B15003_002M, ... lgl
-(1): ...53
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...53`</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>employment <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"employment.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 862 Columns: 17
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(16): GEO_ID, NAME, B23025_001E, B23025_001M, B23025_002E, B23025_002M, ... lgl
-(1): ...17
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...17`</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ethnicity <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"ethnicity.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 862 Columns: 23
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(22): GEO_ID, NAME, B02001_001E, B02001_001M, B02001_002E, B02001_002M, ... lgl
-(1): ...23
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...23`</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>median_income <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"median_income.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 862 Columns: 5
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(4): GEO_ID, NAME, B19013_001E, B19013_001M lgl (1): ...5
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...5`</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"population.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 862 Columns: 5
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(4): GEO_ID, NAME, B01003_001E, B01003_001M lgl (1): ...5
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...5`</code></pre>
-</div>
-</div>
-</section>
 <section id="links-to-the-sources" class="level2">
 <h2 class="anchored" data-anchor-id="links-to-the-sources">Links to the Sources</h2>
 <p>Be aware that we purposefully only picked the data series from 2024 even though a longer period was available for the ACS dataset because it’s the most recent we have and because the EPA data is only available for 2024.</p>
@@ -231,8 +166,341 @@ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 <li>median income: https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&amp;g=010XX00US$0500000</li>
 <li>ethnicity: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&amp;g=010XX00US$0500000</li>
 </ul>
-<p>The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It’s measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde …). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site.</p>
+<p>The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It’s measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde …). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. In this coument you have</p>
 <p>The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about societey characteristics in America.</p>
+</section>
+<section id="important-variables" class="level2">
+<h2 class="anchored" data-anchor-id="important-variables">Important Variables</h2>
+<p>Median household income in the past 12 months (inflation adjusted dollars) : This is a quite explicit variable, it’s a very straightforward way to measure wealth in each county and we picked it over mean because it is not skewed by high incomes. One limit is that there are margins of error because these are survey data (note that the margins of error rarely exceed 10 000usd for annual income).</p>
+<p>Employment rate : This is a variable we’re going to compute manually (dividing the working population over the total population of the county), it’s another very useful measure and we could observe if there exists higher or lower exposition to pollution when the county is more or less employed. This also interesting because maybe some counties are more industrial and have higher employment rate but also higher pollution exposition.</p>
+<p>Ozone measured with arithmetic mean of 8hour average with 2015 as reference (most recent data we have), we chose this variable to partly represent pollution in counties because first of all it’s the measured on the most monitors so it allows us to really have a precise figure. But also it’s one of the most impacting particle for health.</p>
+<p>PM25</p>
+</section>
+</section>
+<section id="data-importation" class="level1">
+<h1>Data importation</h1>
+<section id="epa-data" class="level2">
+<h2 class="anchored" data-anchor-id="epa-data">EPA Data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pollution <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"annual_conc_by_monitor_2024.csv"</span>),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="st">`</span><span class="at">State Code</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">County Code</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Site Num</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Parameter Code</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">POC =</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">Latitude =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">Longitude =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">Datum =</span> <span class="fu">col_factor</span>(<span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"NAD83"</span>)),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Parameter Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Sample Duration</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Pollutant Standard</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Metric Used</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Method Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">Year =</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Units of Measure</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Event Type</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Observation Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Observation Percent</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Completeness Indicator</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_factor</span>(<span class="fu">c</span>(<span class="st">"Y"</span>, <span class="st">"N"</span>)),</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Valid Day Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Required Day Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Exceptional Data Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Null Data Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Primary Exceedance Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Secondary Exceedance Count</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Certification Indicator</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Num Obs Below MDL</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Arithmetic Mean</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Arithmetic Standard Dev</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">1st Max Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">1st Max DateTime</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_datetime</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">2nd Max Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">2nd Max DateTime</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_datetime</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">3rd Max Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">3rd Max DateTime</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_datetime</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">4th Max Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">4th Max DateTime</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_datetime</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">1st Max Non Overlapping Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_logical</span>(),</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">1st NO Max DateTime</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_logical</span>(),</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">2nd Max Non Overlapping Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_logical</span>(),</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">2nd NO Max DateTime</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_logical</span>(),</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">99th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">98th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">95th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">90th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">75th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">50th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">10th Percentile</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_double</span>(),</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Local Site Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">Address =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">State Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">County Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">City Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">CBSA Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_character</span>(),</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">`</span><span class="at">Date of Last Change</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">""</span>),</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">.delim =</span> <span class="st">","</span>))</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>pollution <span class="ot">&lt;-</span> pollution <span class="sc">|&gt;</span></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="dv">38</span><span class="sc">:</span><span class="dv">41</span>) <span class="co">#full NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="acs-data" class="level2">
+<h2 class="anchored" data-anchor-id="acs-data">ACS Data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>education <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"education.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 862 Columns: 53
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(52): GEO_ID, NAME, B15003_001E, B15003_001M, B15003_002E, B15003_002M, ... lgl
+(1): ...53
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...53`</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>employment <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"employment.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 862 Columns: 17
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(16): GEO_ID, NAME, B23025_001E, B23025_001M, B23025_002E, B23025_002M, ... lgl
+(1): ...17
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...17`</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ethnicity <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"ethnicity.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 862 Columns: 23
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(22): GEO_ID, NAME, B02001_001E, B02001_001M, B02001_002E, B02001_002M, ... lgl
+(1): ...23
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...23`</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>median_income <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"median_income.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 862 Columns: 5
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(4): GEO_ID, NAME, B19013_001E, B19013_001M lgl (1): ...5
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...5`</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">vroom</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"population.csv"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 862 Columns: 5
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(4): GEO_ID, NAME, B01003_001E, B01003_001M lgl (1): ...5
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...5`</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cleaning_ACS <span class="ot">&lt;-</span> <span class="cf">function</span>(df){</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df)[<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(df)] <span class="ot">&lt;-</span> <span class="fu">as.character</span>(df[<span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(df)])</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df[<span class="sc">-</span><span class="dv">1</span>, ] <span class="co">#explicit title is in line 1</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df[, <span class="sc">-</span><span class="fu">ncol</span>(df)] <span class="co">#always full of NA</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  df[<span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(df)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df[<span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(df)], as.integer) <span class="co">#integer type for every column but 1 &amp; 2</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  df</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>education <span class="ot">&lt;-</span> <span class="fu">cleaning_ACS</span>(education)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>employment <span class="ot">&lt;-</span> <span class="fu">cleaning_ACS</span>(employment)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>ethnicity <span class="ot">&lt;-</span> <span class="fu">cleaning_ACS</span>(ethnicity) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="dv">4</span>) <span class="co">#full of NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion
+Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>median_income <span class="ot">&lt;-</span> <span class="fu">cleaning_ACS</span>(median_income)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">cleaning_ACS</span>(population) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="dv">4</span>) <span class="co">#full of NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lapply(df[3:ncol(df)], as.integer): NAs introduced by coercion</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="description-of-the-data" class="level1">
+<h1>Description of the data</h1>
+<section id="epa-data-1" class="level2">
+<h2 class="anchored" data-anchor-id="epa-data-1">EPA Data</h2>
+<table class="caption-top table">
+<caption>Basic information about pollution EPA data</caption>
+<tbody>
+<tr class="odd">
+<td>Number of rows</td>
+<td>68956</td>
+</tr>
+<tr class="even">
+<td>Number of columns</td>
+<td>51</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="acs-data-1" class="level2">
+<h2 class="anchored" data-anchor-id="acs-data-1">ACS Data</h2>
+<section id="education" class="level3">
+<h3 class="anchored" data-anchor-id="education">Education</h3>
+<table class="caption-top table">
+<caption>Basic information about education ACS data</caption>
+<tbody>
+<tr class="odd">
+<td>Number of rows</td>
+<td>861</td>
+</tr>
+<tr class="even">
+<td>Number of columns</td>
+<td>52</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="employment" class="level3">
+<h3 class="anchored" data-anchor-id="employment">Employment</h3>
+<table class="caption-top table">
+<caption>Basic information about employment ACS data</caption>
+<tbody>
+<tr class="odd">
+<td>Number of rows</td>
+<td>861</td>
+</tr>
+<tr class="even">
+<td>Number of columns</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ethnicity" class="level3">
+<h3 class="anchored" data-anchor-id="ethnicity">Ethnicity</h3>
+<table class="caption-top table">
+<caption>Basic information about education ACS data</caption>
+<tbody>
+<tr class="odd">
+<td>Number of rows</td>
+<td>861</td>
+</tr>
+<tr class="even">
+<td>Number of columns</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="median-income" class="level3">
+<h3 class="anchored" data-anchor-id="median-income">Median income</h3>
+<table class="caption-top table">
+<caption>Basic information about median income ACS data</caption>
+<tbody>
+<tr class="odd">
+<td>Number of rows</td>
+<td>861</td>
+</tr>
+<tr class="even">
+<td>Number of columns</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="population" class="level3">
+<h3 class="anchored" data-anchor-id="population">Population</h3>
+<table class="caption-top table">
+<caption>Basic information about population ACS data</caption>
+<tbody>
+<tr class="odd">
+<td>Number of rows</td>
+<td>861</td>
+</tr>
+<tr class="even">
+<td>Number of columns</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 </section>
 
