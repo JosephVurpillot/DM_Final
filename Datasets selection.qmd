@@ -1,0 +1,22 @@
+---
+title: "Data sets selection"
+author: "Dylan and Joseph"
+format: html
+---
+
+Our project aims to identify the socio-economical factors associated with air pollution in the USA in 2024. For that, we use two different sources of datasets.
+
+The first is the U.S. Environmental Protection Agency (EPA). Air Quality System (AQS) Data Mart / AirData. Annual Summary Data (https://aqs.epa.gov/aqsweb/airdata/annual_conc_by_monitor_2024.zip). Information on the data is available on the following link : https://aqs.epa.gov/aqsweb/airdata/FileFormats.html.
+
+The second one is the 2024 American Community Survey (ACS) county-level tables, published by the U.S. Census Bureau. Links are the following :
+- population: https://data.census.gov/table/ACSDT1Y2024.B01003?q=B01003&g=010XX00US$0500000
+- employment: https://data.census.gov/table/ACSDT1Y2024.B23025?q=B23025&g=010XX00US$0500000
+- education: https://data.census.gov/table/ACSDT1Y2024.B15003?q=B15003&g=010XX00US$0500000
+- median income: https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&g=010XX00US$0500000
+- ethnicity: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US$0500000
+For each one, we must check that we download the 2024 1 year table.
+Information on the ACS data is available on the following link: https://www.census.gov/programs-surveys/acs.html
+
+We chose 2024 because it is the most recent year for which both datasets were fully available and relevant. The ACS is also available on 5-year but we chose 1-year tables for coherence with 2024 EPA. Therefore, some rural counties with low population are excluded, and we have a bit less than 1000 observations. We are aware of this limit and we will treat it.
+
+Both sources use State and County as variables. Both sources identify counties with numerical codes (method 1) and with state and county names (method 2), but in different forms: the EPA gives the state code and the county code in two separate fields, while the ACS gives a single long geographic identifier (GEO_ID). County codes alone are not unique across states, which is why the state is part of the key. We will use one of these two methods (maybe both) to merge datasets, with the condition to standardize the form to delete differences. By standardizing, we mean that at the end both sources will contain a State + County numerical variable and a State + County string variable, with no differences of form between the two variables so that we can join with no problem.
