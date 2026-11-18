@@ -35,6 +35,7 @@ Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
 - ethnicity: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US\$0500000
 
 The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site.
+The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. In this coument you have 
 
 The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about societey characteristics in America.
 
