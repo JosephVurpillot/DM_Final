@@ -12,6 +12,7 @@ library(vroom)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(stringr)
 ```
 
 # Here configuration
@@ -38,7 +39,26 @@ Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
 - median income: https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&g=010XX00US\$0500000
 - ethnicity: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US\$0500000
 
+<<<<<<< HEAD
 The first dataset about pollution per counties in 2024 in the United States, was published by The Environmental Protection agency and more precisely supplied by the Air Quality System (AQS) which is connected to local air agencies that collect and report the data to the AQS . The Environmental Protection Agency is the US government agency that works to keep the air, the water and the land in the US territory clean and safe. It sets the rules on pollution, cleans up contaminated places, and tries to make sure companies and communities aren’t harming people’s health or the environment. Its measurement system is based on a monitor located in some counties which measures different pollution levels and metrics (ozone, pm25 and  nitrogene dioxide particularly which are going to be our main focus). These gases and particles have legal level limitations since the clean air act, it's why they are monitored the same way everywhere. We will be able then to compare the values observed in the counties with the national legal level to have an idea of the severity of air pollution. On top of this the 3 main pollutant we are going to focus on are Ozone, PM25 and nitrogene dioxide which are measured in different units since the first and the last are gases measured in ppm and ppb and PM25 is a particle measured in µg/m³. So we will have three separated analysis that obviously we are going to link but we will not be able to represent the effect of socio-economic effects on two pollutants at the same time in one graph for example.  Here the data isn't available in every county but only in the counties where there are monitors (1036 out of about 3100 counties in the US). To continue the monitors have a completeness indicator that we will use, indeed we're only going to keep the observations that are complete for precision matter.
+=======
+The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site.
+The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. In this coument you have 
+
+The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about society characteristics in America.
+
+## Variables
+
+Median household income in the past 12 months (inflation adjusted dollars) : This is a quite explicit variable, it’s a very straightforward way to measure wealth in each county and we picked it over mean because it is not skewed  by high incomes. One limit is that there are margins of error because these are survey data (note that the margins of error rarely exceed 10 000usd for annual income).
+
+Unemployment rate : This is a variable we’re going to compute manually (dividing the unemployed population over the total labor force of the county), it’s another very useful measure and we could observe if there exists higher or lower exposition to pollution when the county is more or less employed. This also interesting because maybe some counties are more industrial and have higher employment rate but also higher pollution exposition.
+
+Ozone measured with arithmetic mean of 8hour average  2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it’s the widest pollutant measured on  monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from vehicles and industry . We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
+
+Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 900 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m^3.
+
+The last variable about air pollution is Nitrogen dioxide in parts per billion, we will also measure it with its annual arithmetic mean. It comes mainly from road traffic and is concentrated in dense urban areas. That makes it the pollutant most directly tied to where people live and work, and the one most often used in environmental justice research. It also contributes to forming PM2.5 and ozone. This variable is less captured by monitors but it still very impactful so we want to keep 
+>>>>>>> a029764d46ec2abde70e624f120c42db2e861256
 
 
 The second element of our study is a group of data sets representing different measures of socio-economic features in the US in only 2024. A 5 year analysis exists but we voluntarily chose the 2024 survey so that the year match with the AQS data. These measures were collected by the Census Bureau and more precisely by the American community survey and are published every year. It is one of the most reliable information source about society characteristics in America since the census bureau interrogates about 3.5 millions of households and the answer is mandatory by law. It doesn't guarantee accuracy but at least we have a very large amount of data to work with. It is also important to understand that these data are survey data so as the name says it is extracted from surveys that allow margins of error with a 90% confidence level. So even if these margins exists they are quite thin and the data is still very representative of the socio-economic aspects we want to work on. On top of this the ACS release only take into account the counties with more than 65 000 inhabitants. It is another limitation because our analysis will be on more populated counties and rural counties will be left out. 
@@ -162,8 +182,6 @@ population <- cleaning_ACS(population) |>
 
 # Breve description of the data
 
-# Description of the data
-
 ## EPA Data
 
 |                   |                       |
@@ -222,61 +240,77 @@ population <- cleaning_ACS(population) |>
 
 # Data joining and cleaning
 
-## Separating state and county in ACS Data
+## Harmonizing the format of geo_Ids
 
-In order to join the data, it is essential first to work with our key variable under the same format.
+In order to join the data, it is essential first to work with our key variable under the same format. In a precedent commit, we turned ACS format into EPA format. However, this is not the right method because a county is unique only at State level, not at national level (we have County 1 for States 1, 2, 3... and for instance Washington County is a County for different States). Therefore, we have to obtain a unique geo_ID with State code following by County Code.
 
-### Harmonizing State and County's name format
+In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id in which we have the unite State code and County Code in that order. However, for State codes, 1 must become 01, and for County Codes 1 must become 001. As it is pretty difficult, we will compute a new geo_ID for both datasets, under the following format : S1C23, S20C330, S8C9 (what follows S is the State Code and what follows C is the County Code). Without S and C, geo_ID for State 1 and County 12 would be the same than geo_ID for State 11 and County 2.
 
+<<<<<<< HEAD
 In EPA Data, we have two different columns County Name and State Name. In ACS Data, we have one unique column under the following form : County Name, State Name. We then have to split them by "," to obtain two different columns, in order to have the same form in both datasets.
+=======
+### EPA Data
+>>>>>>> a029764d46ec2abde70e624f120c42db2e861256
 
 ```{r}
-sep_state_county_str <- function(df){
-  df |> 
-    separate_wider_delim(`Geographic Area Name`,
-                         delim = ",",
-                         names = c("County Name", "State Name"))
-}
-
-remove_county_suffix <- function(df){
-  df$`County Name` <- str_remove(df$`County Name`, " County$")
-  df
-}
-#$ sert à enlever " County" en fin de chaîne uniquement (plus sûr)
-
-education <- education |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-employment <- employment |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-ethnicity <- ethnicity |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-median_income <- median_income |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-population <- population |>
-  sep_state_county_str() |>
-  remove_county_suffix()
+pollution <- pollution |>
+  mutate(geo_ID = paste0("S", `State Code`, "C", `County Code`),
+         .before = 1) #first column
 ```
 
-### Harmonizing State and County's code format
-
-In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id where the five last numbers are the State code and the County Code in that order. Therefore, we have to extract these last 5 numbers from the geo_id, to split them and to turn 001 into 1 for instance. After mutating, we will have two new columns, one County Code and one State Code, with numbers as 1, 24 or 456 for instance : the format will be exactly the same between the two datasets.
+### ACS Data
 
 ```{r}
-sep_county_state_code <- function(df){
+ACS_geo_ID <- function(df){
   df |>
-    mutate(`State Code` = as.integer(str_sub(GEO_ID, -5, -4)),
-           `County Code` = as.integer(str_sub(GEO_ID, -3, -1)))
-}
-#-5 est le 5ème élément du geo_id en partant de la fin
-#as.integer transforms 001 into 1 for instance
+    mutate(`State Code` = as.integer(str_sub(GEO_ID, -5, -4)), #-5 est le 5ème élément de la chaîne GEO_ID en partant de la fin par exemple
+           `County Code` = as.integer(str_sub(GEO_ID, -3, -1)), #as.integer transforms 001 into 1 for instance
 
-education <- sep_county_state_code(education)
-employment <- sep_county_state_code(employment)
-ethnicity <- sep_county_state_code(ethnicity)
-median_income <- sep_county_state_code(median_income)
-population <- sep_county_state_code(population)
+           .before = 1) |>
+    mutate(geo_ID = paste0("S", `State Code`, "C", `County Code`),
+           .before = 1) |>
+    select(!`GEO_ID`) #removing former GEO_ID (not the same format)
+}
+
+education <- ACS_geo_ID(education)
+employment <- ACS_geo_ID(employment)
+ethnicity <- ACS_geo_ID(ethnicity)
+median_income <- ACS_geo_ID(median_income)
+population <- ACS_geo_ID(population)
+```
+
+## Selecting relevant lines and columns
+
+For pollution, we keep only observations for which the indicator is considered as statistically complete (Completeness Indicator = Y).
+
+```{r}
+pollution <- pollution |>
+  filter(`Completeness Indicator` == "Y")
+```
+
+For pollution, we keep only observations of the 3 gases we are interested in.
+
+```{r}
+pollution <- pollution |>
+  filter(`Parameter Name` == "Ozone" | `Parameter Name` == "PM2.5 - Local Conditions" | `Parameter Name` == "Nitrogen dioxide (NO2)")
+```
+
+We keep the variables that we judge relevant.
+
+```{r}
+pollution <- pollution |>
+  select(geo_ID, `Parameter Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
+```
+
+We do not keep the columns `Margin of error` for ACS Data
+
+```{r}
+remove_margin <- function(df){
+  df |> select(!starts_with("Margin"))
+}
+education <- remove_margin(education)
+employment <- remove_margin(employment)
+ethnicity <- remove_margin(ethnicity)
+median_income <- remove_margin(median_income)
+population <- remove_margin(population)
 ```
