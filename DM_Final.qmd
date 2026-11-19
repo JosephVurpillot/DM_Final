@@ -37,9 +37,30 @@ Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
 - employment: https://data.census.gov/table/ACSDT1Y2024.B23025?q=B23025&g=010XX00US\$0500000
 - education: https://data.census.gov/table/ACSDT1Y2024.B15003?q=B15003&g=010XX00US\$0500000
 - median income: https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&g=010XX00US\$0500000
-- ethnicity: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US\$0500000
+- race: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US\$0500000
 
 The first dataset about pollution per counties in 2024 in the United States, was published by The Environmental Protection agency and more precisely supplied by the Air Quality System (AQS) which is connected to local air agencies that collect and report the data to the AQS . The Environmental Protection Agency is the US government agency that works to keep the air, the water and the land in the US territory clean and safe. It sets the rules on pollution, cleans up contaminated places, and tries to make sure companies and communities aren’t harming people’s health or the environment. Its measurement system is based on a monitor located in some counties which measures different pollution levels and metrics (ozone, pm25 and  nitrogene dioxide particularly which are going to be our main focus). These gases and particles have legal level limitations since the clean air act, it's why they are monitored the same way everywhere. We will be able then to compare the values observed in the counties with the national legal level to have an idea of the severity of air pollution. On top of this the 3 main pollutant we are going to focus on are Ozone, PM25 and nitrogene dioxide which are measured in different units since the first and the last are gases measured in ppm and ppb and PM25 is a particle measured in µg/m³. So we will have three separated analysis that obviously we are going to link but we will not be able to represent the effect of socio-economic effects on two pollutants at the same time in one graph for example.  Here the data isn't available in every county but only in the counties where there are monitors (1036 out of about 3100 counties in the US). To continue the monitors have a completeness indicator that we will use, indeed we're only going to keep the observations that are complete for precision matter.
+<<<<<<< HEAD
+=======
+=======
+The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site.
+The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. In this coument you have 
+
+The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about society characteristics in America.
+
+## Variables
+
+Median household income in the past 12 months (inflation adjusted dollars) : This is a quite explicit variable, it’s a very straightforward way to measure wealth in each county and we picked it over mean because it is not skewed  by high incomes. One limit is that there are margins of error because these are survey data (note that the margins of error rarely exceed 10 000usd for annual income).
+
+Unemployment rate : This is a variable we’re going to compute manually (dividing the unemployed population over the total labor force of the county), it’s another very useful measure and we could observe if there exists higher or lower exposition to pollution when the county is more or less employed. This also interesting because maybe some counties are more industrial and have higher employment rate but also higher pollution exposition.
+
+Ozone measured with arithmetic mean of 8hour average  2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it’s the widest pollutant measured on  monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from vehicles and industry . We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
+
+Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 900 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m^3.
+
+The last variable about air pollution is Nitrogen dioxide in parts per billion, we will also measure it with its annual arithmetic mean. It comes mainly from road traffic and is concentrated in dense urban areas. That makes it the pollutant most directly tied to where people live and work, and the one most often used in environmental justice research. It also contributes to forming PM2.5 and ozone. This variable is less captured by monitors but it still very impactful so we want to keep it.
+
+>>>>>>> 7ed801027ec6839eeeed08737ab741ed315dc408
 
 The second element of our study is a group of data sets representing different measures of socio-economic features in the US in only 2024. A 5 year analysis exists but we voluntarily chose the 2024 survey so that the year match with the AQS data. These measures were collected by the Census Bureau and more precisely by the American community survey and are published every year. It is one of the most reliable information source about society characteristics in America since the census bureau interrogates about 3.5 millions of households and the answer is mandatory by law. It doesn't guarantee accuracy but at least we have a very large amount of data to work with. It is also important to understand that these data are survey data so as the name says it is extracted from surveys that allow margins of error with a 90% confidence level. So even if these margins exists they are quite thin and the data is still very representative of the socio-economic aspects we want to work on. On top of this the ACS release only take into account the counties with more than 65 000 inhabitants. It is another limitation because our analysis will be on more populated counties and rural counties will be left out. 
 
@@ -53,7 +74,11 @@ Socio-economic features :
 
 - Share of people with a Bachelor's degree or higher : We're also going to compute this variable manually by adding the number of people having a bachelor's/master/doctorate and then divide it by the population over 25 in the county. 
 
+<<<<<<< HEAD
 - Finally we're going to take into account the share of white people of all origins in the county. We know that the USA is subject to a lot of racial inequalities so it can be interesting to see if some races are more or less exposed to massive air pollution. Here a limit is that the document measures races and not ethnicity meaning in the white population hispanics will be included for example even though they are a minority but the variable will still work for afro-american, asian, pacific native ... minorities. 
+=======
+- Finally we're going to take into account the share of non-hispanic-white people in the county. We know that the USA is subject to a lot of racial inequalities so it can be interesting to see if some races are more or less exposed to massive air pollution.
+>>>>>>> 7ed801027ec6839eeeed08737ab741ed315dc408
 
 Air pollution variables :
 
@@ -134,12 +159,11 @@ pollution <- pollution |>
 ## ACS Data
 
 ```{r}
-
 #| message: false
 #| warning: false
 education <- vroom(here("data", "education.csv"))
 employment <- vroom(here("data", "employment.csv"))
-ethnicity <- vroom(here("data", "ethnicity.csv"))
+race <- vroom(here("data", "race.csv"))
 median_income <- vroom(here("data", "median_income.csv"))
 population <- vroom(here("data", "population.csv"))
 
@@ -153,7 +177,7 @@ cleaning_ACS <- function(df){
 
 education <- cleaning_ACS(education)
 employment <- cleaning_ACS(employment)
-ethnicity <- cleaning_ACS(ethnicity) |>
+race <- cleaning_ACS(race) |>
   select(!4) #full of NA
 median_income <- cleaning_ACS(median_income)
 population <- cleaning_ACS(population) |>
@@ -191,12 +215,12 @@ population <- cleaning_ACS(population) |>
 
 : Basic information about employment ACS data
 
-### Ethnicity
+### Race
 
 |                   |                       |
 |-------------------|-----------------------|
-| Number of rows    | `{r} nrow(ethnicity)` |
-| Number of columns | `{r} ncol(ethnicity)` |
+| Number of rows    | `{r} nrow(race)` |
+| Number of columns | `{r} ncol(race)` |
 
 : Basic information about education ACS data
 
@@ -254,7 +278,7 @@ ACS_geo_ID <- function(df){
 
 education <- ACS_geo_ID(education)
 employment <- ACS_geo_ID(employment)
-ethnicity <- ACS_geo_ID(ethnicity)
+race <- ACS_geo_ID(race)
 median_income <- ACS_geo_ID(median_income)
 population <- ACS_geo_ID(population)
 ```
@@ -282,17 +306,27 @@ pollution <- pollution |>
   select(geo_ID, `Parameter Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
 ```
 
-We do not keep the columns `Margin of error` for ACS Data
+We do not keep the columns `Margin of error` for ACS Data.
 
 ```{r}
-remove_margin <- function(df){
-  df |> select(!starts_with("Margin"))
+remove_ACS <- function(df){
+  df |>
+    select(!starts_with("Margin")) |>
+    select(!c(`State Code`, `County Code`, `Geographic Area Name`))
 }
-education <- remove_margin(education)
-employment <- remove_margin(employment)
-ethnicity <- remove_margin(ethnicity)
-median_income <- remove_margin(median_income)
-population <- remove_margin(population)
+education <- remove_ACS(education)
+employment <- remove_ACS(employment)
+race <- remove_ACS(race)
+median_income <- remove_ACS(median_income)
+population <- remove_ACS(population)
+```
+
+```{r}
+ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
+  inner_join(race, by = join_by(`geo_ID`)) |>
+  inner_join(median_income, by = join_by(`geo_ID`)) |>
+  inner_join(population, by = join_by(`geo_ID`))
+joined_data <- inner_join(pollution, ACS, by = join_by(`geo_ID`))
 ```
 
 # Cleaning of education, employment and ethnicity 
