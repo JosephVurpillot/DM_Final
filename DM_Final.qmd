@@ -278,7 +278,7 @@ We keep the variables that we judge relevant.
 
 ```{r}
 pollution <- pollution |>
-  select(geo_ID, `Parameter Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
+  select(geo_ID, `Parameter Name`,`State Name`, `County Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
 ```
 
 We do not keep the columns `Margin of error` for ACS Data.
@@ -287,7 +287,7 @@ We do not keep the columns `Margin of error` for ACS Data.
 remove_ACS <- function(df){
   df |>
     select(!starts_with("Margin")) |>
-    select(!c(`State Code`, `County Code`))
+    select(!c(`State Code`, `County Code`, `Geographic Area Name`))
 }
 education <- remove_ACS(education)
 employment <- remove_ACS(employment)
@@ -303,19 +303,25 @@ education <- education |>  mutate (num_bachelors_or_more=`Estimate!!Total:!!Bach
                               `Estimate!!Total:!!Master's degree` +
                               `Estimate!!Total:!!Professional school degree` +
                               `Estimate!!Total:!!Doctorate degree`)
-education<- education |> select (geo_ID,`Geographic Area Name`,`Estimate!!Total:`, num_bachelors_or_more)
+education<- education |> select (geo_ID,`Estimate!!Total:`, num_bachelors_or_more)
 education <- education |> mutate (ratio= num_bachelors_or_more/`Estimate!!Total:`)
 ```
 
 First we clean the data set only keeping what we want including the geographical id's so that we can join after. Then we compute a new variable named `num_bachelors_or_more` that takes into account all the people having a Bachelor's, Master's, Professional school degree or PHD.  And then we simply compute a basic ratio to give the share of people having a bachelor's or better in the 25+ population. 
 
 ```{r}
-employment<- employment |> select(geo_ID, `Geographic Area Name`, `Estimate!!Total:!!In labor force:!!Civilian labor force:`, `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
+employment<- employment |> select(geo_ID, `Estimate!!Total:!!In labor force:!!Civilian labor force:`, `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
 employment <- employment |> mutate(unemployment_rate=`Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`/`Estimate!!Total:!!In labor force:!!Civilian labor force:` )
 ```
 
 We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
 
+```{r}
+race<- race |> select(geo_ID,`Estimate!!Total:`, `Estimate!!Total:!!White alone`)
+race<- race |> mutate (share_of_white_people=`Estimate!!Total:!!White alone`/`Estimate!!Total:`)
+```
+
+Here we only keep the geo info, the white population and total population per county and once the data set is cleaned we compute the share by dividing the number of white people in the county by total population.
 
 ```{r}
 ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
