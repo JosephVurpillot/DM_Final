@@ -126,7 +126,6 @@ pollution <- pollution |>
 ## ACS Data
 
 ```{r}
-
 #| message: false
 #| warning: false
 education <- vroom(here("data", "education.csv"))
@@ -270,7 +269,7 @@ pollution <- pollution |>
   select(geo_ID, `Parameter Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
 ```
 
-We do not keep the columns `Margin of error` for ACS Data
+We do not keep the columns `Margin of error` for ACS Data.
 
 ```{r}
 remove_margin <- function(df){
