@@ -272,13 +272,17 @@ pollution <- pollution |>
 We do not keep the columns `Margin of error` for ACS Data.
 
 ```{r}
-remove_margin <- function(df){
-  df |> select(!starts_with("Margin"))
+remove_ACS <- function(df){
+  df |>
+    select(!starts_with("Margin")) |>
+    select(!c(`State Code`, `County Code`, `Geographic Area Name`))
 }
-education <- remove_margin(education)
-employment <- remove_margin(employment)
-ethnicity <- remove_margin(ethnicity)
-median_income <- remove_margin(median_income)
-population <- remove_margin(population)
+education <- remove_ACS(education)
+employment <- remove_ACS(employment)
+ethnicity <- remove_ACS(ethnicity)
+median_income <- remove_ACS(median_income)
+population <- remove_ACS(population)
+```
+
 ```
 
