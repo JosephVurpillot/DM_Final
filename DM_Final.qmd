@@ -12,6 +12,7 @@ library(vroom)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(stringr)
 ```
 
 # Here configuration
@@ -213,62 +214,36 @@ population <- cleaning_ACS(population) |>
 
 # Data joining and cleaning
 
-## Separating state and county in ACS Data
+In order to join the data, it is essential first to work with our key variable under the same format. In a precedent commit, we turned ACS format into EPA format. However, this is not the right method because a county is unique only at State level, not at national level (we have County 1 for States 1, 2, 3... and for instance Washington County is a County for different States). Therefore, we have to obtain a unique geo_ID with State code following by County Code.
 
-In order to join the data, it is essential first to work with our key variable under the same format.
+In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id in which we have the unite State code and County Code in that order. However, for State codes, 1 must become 01, and for County Codes 1 must become 001. As it is pretty difficult, we will compute a new geo_ID for both datasets, under the following format : S1C23, S20C330, S8C9 (what follows S is the State Code and what follows C is the County Code). Without S and C, geo_ID for State 1 and County 12 would be the same than geo_ID for State 11 and County 2.
 
-### Harmonizing State and County's name format
-
-In EPA Data, we have two different columns County Name and State Name. In ACS Data, we have one unique column under the following form : County Name, State Name. We then have to split them by "," to obtain two different columns, in order to have the same form in both datasets. 
+## EPA Data
 
 ```{r}
-sep_state_county_str <- function(df){
-  df |> 
-    separate_wider_delim(`Geographic Area Name`,
-                         delim = ",",
-                         names = c("County Name", "State Name"))
-}
-
-remove_county_suffix <- function(df){
-  df$`County Name` <- str_remove(df$`County Name`, " County$")
-  df
-}
-#$ sert à enlever " County" en fin de chaîne uniquement (plus sûr)
-
-education <- education |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-employment <- employment |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-ethnicity <- ethnicity |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-median_income <- median_income |>
-  sep_state_county_str() |>
-  remove_county_suffix()
-population <- population |>
-  sep_state_county_str() |>
-  remove_county_suffix()
+pollution <- pollution |>
+  mutate(geo_ID = paste0("S", `State Code`, "C", `County Code`),
+         .before = 1) #first column
 ```
 
-### Harmonizing State and County's code format
-
-In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id where the five last numbers are the State code and the County Code in that order. Therefore, we have to extract these last 5 numbers from the geo_id, to split them and to turn 001 into 1 for instance. After mutating, we will have two new columns, one County Code and one State Code, with numbers as 1, 24 or 456 for instance : the format will be exactly the same between the two datasets.
+## ACS Data
 
 ```{r}
-sep_county_state_code <- function(df){
+ACS_geo_ID <- function(df){
   df |>
-    mutate(`State Code` = as.integer(str_sub(GEO_ID, -5, -4)),
-           `County Code` = as.integer(str_sub(GEO_ID, -3, -1)))
-}
-#-5 est le 5ème élément du geo_id en partant de la fin
-#as.integer transforms 001 into 1 for instance
+    mutate(`State Code` = as.integer(str_sub(GEO_ID, -5, -4)), #-5 est le 5ème élément de la chaîne GEO_ID en partant de la fin par exemple
+           `County Code` = as.integer(str_sub(GEO_ID, -3, -1)), #as.integer transforms 001 into 1 for instance
 
-education <- sep_county_state_code(education)
-employment <- sep_county_state_code(employment)
-ethnicity <- sep_county_state_code(ethnicity)
-median_income <- sep_county_state_code(median_income)
-population <- sep_county_state_code(population)
+           .before = 1) |>
+    mutate(geo_ID = paste0("S", `State Code`, "C", `County Code`),
+           .before = 1) |>
+    select(!`GEO_ID`) #removing former GEO_ID (not the same format)
+}
+
+education <- ACS_geo_ID(education)
+employment <- ACS_geo_ID(employment)
+ethnicity <- ACS_geo_ID(ethnicity)
+median_income <- ACS_geo_ID(median_income)
+population <- ACS_geo_ID(population)
 ```
 
