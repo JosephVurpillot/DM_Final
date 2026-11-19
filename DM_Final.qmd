@@ -38,7 +38,7 @@ Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
 The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site.
 The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. In this coument you have 
 
-The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about societey characteristics in America.
+The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about society characteristics in America.
 
 ## Variables
 
@@ -154,8 +154,6 @@ population <- cleaning_ACS(population) |>
 
 # Breve description of the data
 
-# Description of the data
-
 ## EPA Data
 
 |                   |                       |
@@ -214,11 +212,13 @@ population <- cleaning_ACS(population) |>
 
 # Data joining and cleaning
 
+## Harmonizing the format of geo_Ids
+
 In order to join the data, it is essential first to work with our key variable under the same format. In a precedent commit, we turned ACS format into EPA format. However, this is not the right method because a county is unique only at State level, not at national level (we have County 1 for States 1, 2, 3... and for instance Washington County is a County for different States). Therefore, we have to obtain a unique geo_ID with State code following by County Code.
 
 In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id in which we have the unite State code and County Code in that order. However, for State codes, 1 must become 01, and for County Codes 1 must become 001. As it is pretty difficult, we will compute a new geo_ID for both datasets, under the following format : S1C23, S20C330, S8C9 (what follows S is the State Code and what follows C is the County Code). Without S and C, geo_ID for State 1 and County 12 would be the same than geo_ID for State 11 and County 2.
 
-## EPA Data
+### EPA Data
 
 ```{r}
 pollution <- pollution |>
@@ -226,7 +226,7 @@ pollution <- pollution |>
          .before = 1) #first column
 ```
 
-## ACS Data
+### ACS Data
 
 ```{r}
 ACS_geo_ID <- function(df){
@@ -245,5 +245,28 @@ employment <- ACS_geo_ID(employment)
 ethnicity <- ACS_geo_ID(ethnicity)
 median_income <- ACS_geo_ID(median_income)
 population <- ACS_geo_ID(population)
+```
+
+## Selecting relevant lines and columns
+
+For pollution, we keep only observations for which the indicator is considered as statistically complete (Completeness Indicator = Y).
+
+```{r}
+pollution <- pollution |>
+  filter(`Completeness Indicator` == "Y")
+```
+
+For pollution, we keep only observations of the 3 gases we are interested in.
+
+```{r}
+pollution <- pollution |>
+  filter(`Parameter Name` == "Ozone" | `Parameter Name` == "PM2.5 - Local Conditions" | `Parameter Name` == "Nitrogen dioxide (NO2)")
+```
+
+We keep the variables that we judge relevant.
+
+```{r}
+pollution <- pollution |>
+  select(geo_ID, `Parameter Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
 ```
 
