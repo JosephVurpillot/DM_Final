@@ -341,7 +341,7 @@ ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
 joined_data <- inner_join(pollution, ACS, by = join_by(`geo_ID`))
 ```
 
-For the next step which is graphing, we're going to regroup the different counties into group because otherwise there will be too much observations. We are going to use the socio-professional aspects of the counties to form groups. For the graphs we are going to try to see if income and race influence the exposure to air pollution. We are going to compute deciles for income and a dummy variable taking 1 if the share of white people is above 70%.  We are also going to rename the variable for manipulation matters and remove some of the columns we kept before just for the clarity and to explain from where our ratios were coming from. 
+For the next step which is graphing, we're going to regroup the different counties into group because otherwise there will be too much observations. We are going to use the socio-professional aspects of the counties to form groups. For the graphs we are going to try to see if income and race influence the exposure to air pollution. We are going to compute deciles for income and quartiles for race denoting counties with the less white share of population to the counties withe the more white people.  We are also going to rename the variable for manipulation matters and remove some of the columns we kept before just for the clarity and to explain from where our ratios were coming from. 
 
 NB : We remove Puerto Rico here the explanation is in the Research question in a Note at the end 
 ```{r}
@@ -367,56 +367,111 @@ joined_data<- joined_data |> inner_join(income_groups, by = join_by(`geo_ID`))
 
 # creation of the dummy variable, again we count only once each county
 # White share per income decile (each county counted once)
-decile_white <- joined_data |>
-  distinct(geo_ID, income_decile, share_white) |>
-  group_by(income_decile) |>
-  summarise(decile_share_white = mean(share_white, na.rm = TRUE)) |>
-  mutate(decile_white_majority = if_else(decile_share_white > 0.7, 1, 0))
+white_groups <- joined_data |>
+  distinct(geo_ID, share_white) |>
+  filter(!is.na(share_white)) |>
+  mutate(white_quartile = ntile(share_white, 4))
 
-joined_data <- joined_data |> left_join(decile_white, by = "income_decile")
+joined_data<- joined_data |> inner_join(white_groups, by = join_by(`geo_ID`))
 
 ```
 
 # Graphs 
 
+Here we want to see if there is a visible correlation between the income and the race and exposure to the different polluant
+
 ## Ozone
+
+### Exposure to Ozone and Income
 
 ```{r}
 joined_data |>
   filter(pollutant == "Ozone 8-hour 2015") |>
-  ggplot(aes(x = as.factor(income_decile), fill = as.factor(decile_white_majority))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", position = "dodge") +
-  stat_summary(aes(y = max4_value), fun = mean, geom = "point", position = position_dodge(0.9)) +
+  ggplot(aes(x = as.factor(income_decile))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "steelblue") +
+  stat_summary(aes(y = max4_value), fun = mean, geom = "point", size = 3) +
   geom_hline(yintercept = 0.07, linetype = "dotted", colour = "red") +
   annotate("text", x = 5, y = .073, hjust = 0,
-               label = "0.07 ppm danger limit fixed by the EPA") +
+           label = "0.07 ppm danger limit fixed by the EPA") +
   coord_cartesian(ylim = c(0.035, 0.08)) +
-  labs(x = "Income decile", y = "Ozone (ppm)", fill = "White majority")
+  labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Ozone (ppm)",
+       caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
-## PM25
+### Exposure to Ozone and Race
 
 ```{r}
 joined_data |>
+  filter(pollutant == "Ozone 8-hour 2015") |>
+  ggplot(aes(x = as.factor(white_quartile))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "darkorange") +
+  stat_summary(aes(y = max4_value), fun = mean, geom = "point", size = 3) +
+  geom_hline(yintercept = 0.07, linetype = "dotted", colour = "red") +
+  annotate("text", x = 1, y = .073, hjust = 0,
+           label = "0.07 ppm danger limit fixed by the EPA") +
+  coord_cartesian(ylim = c(0.035, 0.08)) +
+  labs(x = "White share quartile (1 = least white, 4 = most white)", y = "Ozone (ppm)",
+       caption = "Bars: mean ozone · Points: mean 4th highest daily value")
+```
+
+
+
+## PM25
+
+### PM25 and Income
+
+```{r}
+
+joined_data |>
   filter(pollutant == "PM25 Annual 2024") |>
-  ggplot(aes(x = as.factor(income_decile), fill = as.factor(decile_white_majority))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", position = "dodge") +
+  ggplot(aes(x = as.factor(income_decile))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "steelblue") +
   geom_hline(yintercept = 9, linetype = "dotted", colour = "red") +
     annotate("text", x = 5, y = 9.5, hjust = 0,
                label = "9 µg/m³, danger limit fixed by the EPA")+
   coord_cartesian(ylim = c(5, 9.5)) +
-  labs(x = "Income decile", y = "PM25 (µg/m³)", fill = "White majority")
+  labs(x = "Income decile (1 = poorest, 10 = richest)", y = "PM25 (µg/m³)", 
+       caption = "Bars: mean PM25" )
 ```
+### PM25 and race 
+
+```{r}
+joined_data |>
+  filter(pollutant == "PM25 Annual 2024") |>
+  ggplot(aes(x = as.factor(white_quartile))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "darkorange") +
+  geom_hline(yintercept = 9, linetype = "dotted", colour = "red") +
+    annotate("text", x = 2, y = 9.5, hjust = 0,
+               label = "9 µg/m³, danger limit fixed by the EPA")+
+  coord_cartesian(ylim = c(5, 9.5)) +
+  labs(x = "white quartile (1 = least white, 4 = most white)", y = "PM25 (µg/m³)", 
+       caption = "Bars: mean PM25")
+```
+
 ## Nitrogen dioxide
 
 ```{r}
 joined_data |>
   filter(pollutant == "NO2 Annual 1971") |>
-  ggplot(aes(x = as.factor(income_decile), fill = as.factor(decile_white_majority))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", position = "dodge") +
+  ggplot(aes(x = as.factor(income_decile))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "steelblue") +
   geom_hline(yintercept = 53, linetype = "dotted", colour = "red") +
     annotate("text", x = 5, y = 54, hjust = 0,
                label = "53 ppb, danger limit fixed by the EPA")+
-  labs(x = "Income decile", y = "NO2 (ppb)", fill = "White majority")
+  labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Nitrogene dioxide (ppb)", 
+       caption = "Bars: mean NO2" )
 
+```
+### NO2 and race
+
+```{r}
+joined_data |>
+  filter(pollutant == "NO2 Annual 1971") |>
+  ggplot(aes(x = as.factor(white_quartile))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "darkorange") +
+  geom_hline(yintercept = 53, linetype = "dotted", colour = "red") +
+    annotate("text", x = 2, y = 47, hjust = 0,
+               label = "53 ppb, danger limit fixed by the EPA")+
+  labs(x = "white quartile (1 = least white, 4 = most white)", y = "Nitrogene dioxide (ppb)", 
+       caption = "Bars: mean NO2" )
 ```
 
