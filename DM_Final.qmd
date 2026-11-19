@@ -41,26 +41,6 @@ Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
 
 The first dataset about pollution per counties in 2024 in the United States, was published by The Environmental Protection agency and more precisely supplied by the Air Quality System (AQS) which is connected to local air agencies that collect and report the data to the AQS . The Environmental Protection Agency is the US government agency that works to keep the air, the water and the land in the US territory clean and safe. It sets the rules on pollution, cleans up contaminated places, and tries to make sure companies and communities aren’t harming people’s health or the environment. Its measurement system is based on a monitor located in some counties which measures different pollution levels and metrics (ozone, pm25 and  nitrogene dioxide particularly which are going to be our main focus). These gases and particles have legal level limitations since the clean air act, it's why they are monitored the same way everywhere. We will be able then to compare the values observed in the counties with the national legal level to have an idea of the severity of air pollution. On top of this the 3 main pollutant we are going to focus on are Ozone, PM25 and nitrogene dioxide which are measured in different units since the first and the last are gases measured in ppm and ppb and PM25 is a particle measured in µg/m³. So we will have three separated analysis that obviously we are going to link but we will not be able to represent the effect of socio-economic effects on two pollutants at the same time in one graph for example.  Here the data isn't available in every county but only in the counties where there are monitors (1036 out of about 3100 counties in the US). To continue the monitors have a completeness indicator that we will use, indeed we're only going to keep the observations that are complete for precision matter.
 
-<<<<<<< HEAD
-=======
-The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site.
-The first dataset about pollution per counties in the United States, was published by The Environmental Protection agency and more precisely measured by the Air Quality System (AQS). It's measure system is based on a monitor located in most counties which measures different pollution levels and metrics (ozone, carbone monoxyde ...). Instead of a precise device a monitor represent a place where a parameter is being measure at a given site. In this coument you have 
-
-The second element of our study is a group of datasets representing different measures of socio-economic features in all counties of the US. These measures were collected by the American community survey and more precisely by the Census Bureau and are published every year and is of the most reliable information source about society characteristics in America.
-
-## Variables
-
-Median household income in the past 12 months (inflation adjusted dollars) : This is a quite explicit variable, it’s a very straightforward way to measure wealth in each county and we picked it over mean because it is not skewed  by high incomes. One limit is that there are margins of error because these are survey data (note that the margins of error rarely exceed 10 000usd for annual income).
-
-Unemployment rate : This is a variable we’re going to compute manually (dividing the unemployed population over the total labor force of the county), it’s another very useful measure and we could observe if there exists higher or lower exposition to pollution when the county is more or less employed. This also interesting because maybe some counties are more industrial and have higher employment rate but also higher pollution exposition.
-
-Ozone measured with arithmetic mean of 8hour average  2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it’s the widest pollutant measured on  monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from vehicles and industry . We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
-
-Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 900 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m^3.
-
-The last variable about air pollution is Nitrogen dioxide in parts per billion, we will also measure it with its annual arithmetic mean. It comes mainly from road traffic and is concentrated in dense urban areas. That makes it the pollutant most directly tied to where people live and work, and the one most often used in environmental justice research. It also contributes to forming PM2.5 and ozone. This variable is less captured by monitors but it still very impactful so we want to keep it.
-
->>>>>>> 4e76650314f73449e9c83dc14b0bc3098a39e782
 The second element of our study is a group of data sets representing different measures of socio-economic features in the US in only 2024. A 5 year analysis exists but we voluntarily chose the 2024 survey so that the year match with the AQS data. These measures were collected by the Census Bureau and more precisely by the American community survey and are published every year. It is one of the most reliable information source about society characteristics in America since the census bureau interrogates about 3.5 millions of households and the answer is mandatory by law. It doesn't guarantee accuracy but at least we have a very large amount of data to work with. It is also important to understand that these data are survey data so as the name says it is extracted from surveys that allow margins of error with a 90% confidence level. So even if these margins exists they are quite thin and the data is still very representative of the socio-economic aspects we want to work on. On top of this the ACS release only take into account the counties with more than 65 000 inhabitants. It is another limitation because our analysis will be on more populated counties and rural counties will be left out. 
 
 # Variables
@@ -74,19 +54,14 @@ Socio-economic features :
 - Share of people with a Bachelor's degree or higher : We're also going to compute this variable manually by adding the number of people having a bachelor's/master/doctorate and then divide it by the population over 25 in the county. 
 
 - Finally we're going to take into account the share of white people of all origins in the county. We know that the USA is subject to a lot of racial inequalities so it can be interesting to see if some races are more or less exposed to massive air pollution. Here a limit is that the document measures races and not ethnicity meaning in the white population hispanics will be included for example even though they are a minority but the variable will still work for afro-american, asian, pacific native ... minorities. 
-<<<<<<< HEAD
-=======
-
-- Finally we're going to take into account the share of non-hispanic-white people in the county. We know that the USA is subject to a lot of racial inequalities so it can be interesting to see if some races are more or less exposed to massive air pollution.
->>>>>>> 4e76650314f73449e9c83dc14b0bc3098a39e782
 
 Air pollution variables :
 
-- Ozone measured with arithmetic mean of 8hour average 2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it’s the widest pollutant measured on monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from emissions of  vehicles and industry in sunlight. We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
+- Ozone measured with arithmetic mean of 8hour average 2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it is widely measured on monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from emissions of  vehicles and industry in sunlight. We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
 
-- Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 600 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m\^3.
+- Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 900 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m\^3.
 
-- The last variable about air pollution is Nitrogen dioxide in parts per billion, we will also measure it with its annual arithmetic mean. It comes mainly from road traffic and is concentrated in dense urban areas. That makes it the pollutant most directly tied to where people live and work, and the one most often used in environmental justice research. It also contributes to forming PM2.5 and ozone. This variable is less captured by monitors but it still very impactful so we want to keep
+- The last variable about air pollution is Nitrogen dioxide in parts per billion, we will also measure it with its annual arithmetic mean. It comes mainly from road traffic and is concentrated in dense urban areas. That makes it the pollutant most directly tied to where people live and work, and the one most often used in environmental justice research. It also contributes to forming PM2.5 and ozone. This variable is less captured by monitors but it still very impacting so we want to keep it.
 
 # Data importation
 
@@ -250,9 +225,7 @@ In order to join the data, it is essential first to work with our key variable u
 
 In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id in which we have the unite State code and County Code in that order. However, for State codes, 1 must become 01, and for County Codes 1 must become 001. As it is pretty difficult, we will compute a new geo_ID for both datasets, under the following format : S1C23, S20C330, S8C9 (what follows S is the State Code and what follows C is the County Code). Without S and C, geo_ID for State 1 and County 12 would be the same than geo_ID for State 11 and County 2.
 
-<<<<<<< HEAD
-In EPA Data, we have two different columns County Name and State Name. In ACS Data, we have one unique column under the following form : County Name, State Name. We then have to split them by "," to obtain two different columns, in order to have the same form in both datasets.
-=======
+
 ### EPA Data
 
 ```{r}
@@ -291,7 +264,6 @@ pollution <- pollution |>
   filter(`Completeness Indicator` == "Y")
 ```
 
-For pollution, we keep only observations of the 3 gases we are interested in.
 For pollution, we keep only observations of the 3 pollutants that we are interested in : OZONE, PM25 and Nitrogen Dioxide and we pick one measurement method for each : 
 - 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days at the 4th one we consider it's not exceptional
 - Annual average based on daily exposure for PM25 with the 2024 threshold health level : 9.0 µg/m³ determined by the EPA 
@@ -315,7 +287,7 @@ We keep the variables that we judge relevant.
 
 ```{r}
 pollution <- pollution |>
-  select(geo_ID, `Parameter Name`,`State Name`, `County Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
+  select(geo_ID, `Parameter Name`,`State Name`, `County Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `4th Max Value`)
 ```
 
 We do not keep the columns `Margin of error` for ACS Data.
@@ -346,7 +318,6 @@ education<- education |> select (geo_ID,`Estimate!!Total:`, num_bachelors_or_mor
 education <- education |> mutate (ratio= num_bachelors_or_more/`Estimate!!Total:`)
 ```
 
-First we clean the data set only keeping what we want including the geographical id's so that we can join after. Then we compute a new variable named `num_bachelors_or_more` that takes into account all the people having a Bachelor's, Master's, Professional school degree or PHD.  And then we simply compute a basic ratio to give the share of people having a bachelor's or better in the 25+ population. 
 We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
 
 ```{r}
@@ -354,7 +325,6 @@ employment<- employment |> select(geo_ID, `Estimate!!Total:!!In labor force:!!Ci
 employment <- employment |> mutate(unemployment_rate=`Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`/`Estimate!!Total:!!In labor force:!!Civilian labor force:` )
 ```
 
-We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
 Here we only keep the geo info, the white population and total population per county and once the data set is cleaned we compute the share by dividing the number of white people in the county by total population.
 
 ```{r}
@@ -362,7 +332,6 @@ race<- race |> select(geo_ID,`Estimate!!Total:`, `Estimate!!Total:!!White alone`
 race<- race |> mutate (share_of_white_people=`Estimate!!Total:!!White alone`/`Estimate!!Total:`)
 ```
 
-Here we only keep the geo info, the white population and total population per county and once the data set is cleaned we compute the share by dividing the number of white people in the county by total population.
 
 ```{r}
 ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
@@ -372,7 +341,6 @@ ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
 joined_data <- inner_join(pollution, ACS, by = join_by(`geo_ID`))
 ```
 
-<<<<<<< HEAD
 For the next step which is graphing, we're going to regroup the different counties into group because otherwise there will be too much observations. We are going to use the socio-professional aspects of the counties to form groups. For the graphs we are going to try to see if income and race influence the exposure to air pollution. We are going to compute deciles for income and a dummy variable taking 1 if the share of white people is above 70%.  We are also going to rename the variable for manipulation matters and remove some of the columns we kept before just for the clarity and to explain from where our ratios were coming from. 
 
 NB : We remove Puerto Rico here the explanation is in the Research question in a Note at the end 
@@ -407,21 +375,48 @@ decile_white <- joined_data |>
 
 joined_data <- joined_data |> left_join(decile_white, by = "income_decile")
 
-
-=======
-# Cleaning of education, employment and ethnicity 
-
-```{r}
-education <- education |>  mutate (num_bachelors_or_more=`Estimate!!Total:!!Bachelor's degree` +
-                              `Estimate!!Total:!!Master's degree` +
-                              `Estimate!!Total:!!Professional school degree` +
-                              `Estimate!!Total:!!Doctorate degree`)
-clean_education<- education |> select (geo_ID,`Geographic Area Name`,`Estimate!!Total:`, num_bachelors_or_more)
-clean_education <- clean_education |> mutate (ratio= num_bachelors_or_more/`Estimate!!Total:`)
 ```
 
+# Graphs 
+
+## Ozone
+
 ```{r}
-clean_employment<- employment |> select(geo_ID, `Geographic Area Name`, `Estimate!!Total:!!In labor force:!!Civilian labor force:`, `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
-clean_employment <- clean_employment |> mutate(unemployment_rate=`Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`/`Estimate!!Total:!!In labor force:!!Civilian labor force:` )
+joined_data |>
+  filter(pollutant == "Ozone 8-hour 2015") |>
+  ggplot(aes(x = as.factor(income_decile), fill = as.factor(decile_white_majority))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", position = "dodge") +
+  stat_summary(aes(y = max4_value), fun = mean, geom = "point", position = position_dodge(0.9)) +
+  geom_hline(yintercept = 0.07, linetype = "dotted", colour = "red") +
+  annotate("text", x = 5, y = .073, hjust = 0,
+               label = "0.07 ppm danger limit fixed by the EPA") +
+  coord_cartesian(ylim = c(0.035, 0.08)) +
+  labs(x = "Income decile", y = "Ozone (ppm)", fill = "White majority")
 ```
->>>>>>> 4e76650314f73449e9c83dc14b0bc3098a39e782
+## PM25
+
+```{r}
+joined_data |>
+  filter(pollutant == "PM25 Annual 2024") |>
+  ggplot(aes(x = as.factor(income_decile), fill = as.factor(decile_white_majority))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", position = "dodge") +
+  geom_hline(yintercept = 9, linetype = "dotted", colour = "red") +
+    annotate("text", x = 5, y = 9.5, hjust = 0,
+               label = "9 µg/m³, danger limit fixed by the EPA")+
+  coord_cartesian(ylim = c(5, 9.5)) +
+  labs(x = "Income decile", y = "PM25 (µg/m³)", fill = "White majority")
+```
+## Nitrogen dioxide
+
+```{r}
+joined_data |>
+  filter(pollutant == "NO2 Annual 1971") |>
+  ggplot(aes(x = as.factor(income_decile), fill = as.factor(decile_white_majority))) +
+  stat_summary(aes(y = mean_value), fun = mean, geom = "col", position = "dodge") +
+  geom_hline(yintercept = 53, linetype = "dotted", colour = "red") +
+    annotate("text", x = 5, y = 54, hjust = 0,
+               label = "53 ppb, danger limit fixed by the EPA")+
+  labs(x = "Income decile", y = "NO2 (ppb)", fill = "White majority")
+
+```
+
