@@ -335,6 +335,8 @@ population <- remove_ACS(population)
 
 ## Cleaning of education, employment and race 
 
+First we clean the data set only keeping what we want including the geographical id's so that we can join after. Then we compute a new variable named `num_bachelors_or_more` that takes into account all the people having a Bachelor's, Master's, Professional school degree or PHD.  And then we simply compute a basic ratio to give the share of people having a bachelor's or better in the 25+ population. 
+
 ```{r}
 education <- education |>  mutate (num_bachelors_or_more=`Estimate!!Total:!!Bachelor's degree` +
                               `Estimate!!Total:!!Master's degree` +
@@ -345,6 +347,7 @@ education <- education |> mutate (ratio= num_bachelors_or_more/`Estimate!!Total:
 ```
 
 First we clean the data set only keeping what we want including the geographical id's so that we can join after. Then we compute a new variable named `num_bachelors_or_more` that takes into account all the people having a Bachelor's, Master's, Professional school degree or PHD.  And then we simply compute a basic ratio to give the share of people having a bachelor's or better in the 25+ population. 
+We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
 
 ```{r}
 employment<- employment |> select(geo_ID, `Estimate!!Total:!!In labor force:!!Civilian labor force:`, `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
@@ -352,6 +355,7 @@ employment <- employment |> mutate(unemployment_rate=`Estimate!!Total:!!In labor
 ```
 
 We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
+Here we only keep the geo info, the white population and total population per county and once the data set is cleaned we compute the share by dividing the number of white people in the county by total population.
 
 ```{r}
 race<- race |> select(geo_ID,`Estimate!!Total:`, `Estimate!!Total:!!White alone`)
@@ -369,7 +373,39 @@ joined_data <- inner_join(pollution, ACS, by = join_by(`geo_ID`))
 ```
 
 <<<<<<< HEAD
+For the next step which is graphing, we're going to regroup the different counties into group because otherwise there will be too much observations. We are going to use the socio-professional aspects of the counties to form groups. For the graphs we are going to try to see if income and race influence the exposure to air pollution. We are going to compute deciles for income and a dummy variable taking 1 if the share of white people is above 70%.  We are also going to rename the variable for manipulation matters and remove some of the columns we kept before just for the clarity and to explain from where our ratios were coming from. 
 
+NB : We remove Puerto Rico here the explanation is in the Research question in a Note at the end 
+```{r}
+joined_data <- joined_data |>
+  rename(pollutant        = `Pollutant Standard`,
+         mean_value       = `Arithmetic Mean`,
+         max4_value       = `4th Max Value`,
+         share_bachelor   = ratio,
+         share_white      = share_of_white_people,
+         median_income    = `Estimate!!Median household income in the past 12 months (in 2024 inflation-adjusted dollars)`,
+         population       = `Estimate!!Total`) |>
+  select(geo_ID, `State Name`, `County Name`, pollutant, `Units of Measure`,
+         mean_value, max4_value, median_income, unemployment_rate,
+         share_bachelor, share_white, population)
+joined_data <- joined_data |> filter(`State Name` != "Puerto Rico")
+
+# decile creation, we are being careful to only count each county once 
+income_groups <- joined_data |>
+  distinct(geo_ID, median_income) |>              
+  mutate(income_decile = ntile(median_income, 10))
+
+joined_data<- joined_data |> inner_join(income_groups, by = join_by(`geo_ID`))
+
+# creation of the dummy variable, again we count only once each county
+# White share per income decile (each county counted once)
+decile_white <- joined_data |>
+  distinct(geo_ID, income_decile, share_white) |>
+  group_by(income_decile) |>
+  summarise(decile_share_white = mean(share_white, na.rm = TRUE)) |>
+  mutate(decile_white_majority = if_else(decile_share_white > 0.7, 1, 0))
+
+joined_data <- joined_data |> left_join(decile_white, by = "income_decile")
 
 
 =======
