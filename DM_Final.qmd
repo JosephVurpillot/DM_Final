@@ -292,10 +292,23 @@ pollution <- pollution |>
 ```
 
 For pollution, we keep only observations of the 3 gases we are interested in.
+For pollution, we keep only observations of the 3 pollutants that we are interested in : OZONE, PM25 and Nitrogen Dioxide and we pick one measurement method for each : 
+- 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days at the 4th one we consider it's not exceptional
+- Annual average based on daily exposure for PM25 with the 2024 threshold health level : 9.0 µg/m³ determined by the EPA 
+- Annual average based on hourly measurment for Nitrgen dioxide with a limit set at 53 ppb in 1972. This gas effect is more complex to measure because we will see that actually our observations never reach this limit but it can still be interesting to see which counties have the higher values and we could also consider this limit as obsolete since its very old.
+
 
 ```{r}
 pollution <- pollution |>
   filter(`Parameter Name` == "Ozone" | `Parameter Name` == "PM2.5 - Local Conditions" | `Parameter Name` == "Nitrogen dioxide (NO2)")
+pollution <- pollution |>
+  filter(`Pollutant Standard` %in% c("Ozone 8-hour 2015",
+                                     "PM25 Annual 2024",
+                                     "NO2 Annual 1971"),
+         `Event Type` %in% c("No Events", "Events Included"),
+         `Units of Measure` %in% c("Parts per million",
+                                 "Parts per billion",
+                                 "Micrograms/cubic meter (LC)"))
 ```
 
 We keep the variables that we judge relevant.
