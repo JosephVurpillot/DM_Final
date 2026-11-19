@@ -270,3 +270,16 @@ pollution <- pollution |>
   select(geo_ID, `Parameter Name`, `Sample Duration`, `Pollutant Standard`, `Units of Measure`, `Arithmetic Mean`, `1st Max Value`)
 ```
 
+We do not keep the columns `Margin of error` for ACS Data
+
+```{r}
+remove_margin <- function(df){
+  df |> select(!starts_with("Margin"))
+}
+education <- remove_margin(education)
+employment <- remove_margin(employment)
+ethnicity <- remove_margin(ethnicity)
+median_income <- remove_margin(median_income)
+population <- remove_margin(population)
+```
+
