@@ -284,5 +284,11 @@ median_income <- remove_ACS(median_income)
 population <- remove_ACS(population)
 ```
 
+```{r}
+ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
+  inner_join(ethnicity, by = join_by(`geo_ID`)) |>
+  inner_join(median_income, by = join_by(`geo_ID`)) |>
+  inner_join(population, by = join_by(`geo_ID`))
+joined_data <- inner_join(pollution, ACS, by = join_by(`geo_ID`))
 ```
 
