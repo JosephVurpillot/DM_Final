@@ -2,11 +2,14 @@
 title: "DM_Final"
 author: "Dylan Pelloquin and Joseph Vurpillot"
 format: html
+
 ---
 
 # Packages and librairies
 
 ```{r}
+#| message: false
+#| warning: false
 library(here)
 library(vroom)
 library(dplyr)
@@ -20,6 +23,23 @@ library(stringr)
 ```{r}
 here::i_am("DM_Final.Rproj")
 ```
+# Research Question 
+
+Air pollution is one of the main environmental threats to public health. Fine particles, ozone and nitrogen dioxide are linked to respiratory and cardiovascular diseases and premature death. Yet these pollutants are not distributed evenly across the territory. Their sources (road traffic, power plants, industrial sites, major roads) are concentrated in some places rather than others, and the decisions about where to locate them may reflect the socio-economic environment of the surrounding population. In the United States, a large body of research on environmental justice has shown that low-income communities and racial minorities often live closer to pollution sources.  And it is what we are goin to try to demonstrate as well. Our project investigate whether a pattern can still be observed at the county level in 2024 in the USA.
+
+To answer this question, we are combining two official sources. The EPA's Air Quality System gives us the annual concentrations measured by monitors for three pollutants: ozone, PM2.5 and nitrogen dioxide (refer to our source description for more details). The American Community Survey from the Census Bureau gives us data so we can compute some variable representing the socio-economic profile of each county: median household income, unemployment rate, share of adults with a bachelor's degree or higher, and share of White population (same a dedicated part to the description of our variables is available). Both datasets refer to the same year, 2024, and are linked through a common county identifier : a state code that we constructed manually.
+
+We focus on four dimensions of socio-economic status. Income is the most direct measure of a county's wealth. Unemployment reflects the local economic situation, but it may also capture the industrial structure of a county. Education measures social status and the ability of communities to defend their interests and oppose polluting projects. Finally, the share of White population allows us to test whether racial minorities are more exposed, a central concern of environmental justice research.
+
+Our main hypothesis is that poorer, less educated and less White counties are exposed to higher levels of air pollution. However, we expect this relationship to differ across pollutants. NO₂, which comes mainly from traffic, should be strongly linked to urban areas, where minorities are more concentrated. PM2.5 has both local and regional sources and may show a link with income. Ozone, a secondary pollutant formed regionally under sunny and hot conditions, may depend more on climate and geography than on local socio-economic characteristics.
+
+To explore these relationships, we group counties into income deciles and into quartiles of White population share, and compare average pollution levels across groups. We also compare observed concentrations with the legal limits set by the EPA, to assess not only who is more exposed, but also how serious that exposure is.
+
+Our results describe associations, not causal effects. A link between race and pollution, for instance, may partly reflect the fact that large cities are both more diverse and more polluted. Our sample is also limited to counties that have a pollution monitor and more than 65,000 inhabitants, so our conclusions apply mainly to urban and suburban America.
+
+
+NOTE : We got rid of the 4 counties of Puerto Rico because it has a very different weather compared to continental USA and that can lead to higher level of pm25 for example. Plus it is not considered as a state of the USA and finally the incomes are significantly lower than in other states so it create a small flaw concerning income deciles.
+
 # Links to Git hub
 
 https://github.com/JosephVurpillot/DM_Final.git
@@ -32,12 +52,12 @@ Be aware that we purposefully only picked the data series from 2024 even though 
 
 Here's the website https://aqs.epa.gov/aqsweb/airdata/download_files.html
 
-- ACS DATA : 
-- population: https://data.census.gov/table/ACSDT1Y2024.B01003?q=B01003&g=010XX00US\$0500000
-- employment: https://data.census.gov/table/ACSDT1Y2024.B23025?q=B23025&g=010XX00US\$0500000
-- education: https://data.census.gov/table/ACSDT1Y2024.B15003?q=B15003&g=010XX00US\$0500000
-- median income: https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&g=010XX00US\$0500000
-- race: https://data.census.gov/table/ACSDT1Y2024.B03002?q=B03002&g=010XX00US\$0500000
+- ACS DATA :
+- population: [B01003](https://data.census.gov/table/ACSDT1Y2024.B01003?q=B01003&g=010XX00US%240500000)
+- employment: [B23025](https://data.census.gov/table/ACSDT1Y2024.B23025?q=B23025&g=010XX00US%240500000)
+- education: [B15003](https://data.census.gov/table/ACSDT1Y2024.B15003?q=B15003&g=010XX00US%240500000)
+- median income: [B19013](https://data.census.gov/table/ACSDT1Y2024.B19013?q=B19013&g=010XX00US%240500000)
+- race: [B02001](https://data.census.gov/table/ACSDT1Y2024.B02001?q=B02001&g=010XX00US%240500000)
 
 The first dataset about pollution per counties in 2024 in the United States, was published by The Environmental Protection agency and more precisely supplied by the Air Quality System (AQS) which is connected to local air agencies that collect and report the data to the AQS . The Environmental Protection Agency is the US government agency that works to keep the air, the water and the land in the US territory clean and safe. It sets the rules on pollution, cleans up contaminated places, and tries to make sure companies and communities aren’t harming people’s health or the environment. Its measurement system is based on a monitor located in some counties which measures different pollution levels and metrics (ozone, pm25 and  nitrogene dioxide particularly which are going to be our main focus). These gases and particles have legal level limitations since the clean air act, it's why they are monitored the same way everywhere. We will be able then to compare the values observed in the counties with the national legal level to have an idea of the severity of air pollution. On top of this the 3 main pollutant we are going to focus on are Ozone, PM25 and nitrogene dioxide which are measured in different units since the first and the last are gases measured in ppm and ppb and PM25 is a particle measured in µg/m³. So we will have three separated analysis that obviously we are going to link but we will not be able to represent the effect of socio-economic effects on two pollutants at the same time in one graph for example.  Here the data isn't available in every county but only in the counties where there are monitors (1036 out of about 3100 counties in the US). To continue the monitors have a completeness indicator that we will use, indeed we're only going to keep the observations that are complete for precision matter.
 
@@ -266,7 +286,7 @@ pollution <- pollution |>
 ```
 
 For pollution, we keep only observations of the 3 pollutants that we are interested in : OZONE, PM25 and Nitrogen Dioxide and we pick one measurement method for each : 
-- 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days at the 4th one we consider it's not exceptional
+- 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days, at the 4th one we consider it's not exceptional
 - Annual average based on daily exposure for PM25 with the 2024 threshold health level : 9.0 µg/m³ determined by the EPA 
 - Annual average based on hourly measurment for Nitrgen dioxide with a limit set at 53 ppb in 1972. This gas effect is more complex to measure because we will see that actually our observations never reach this limit but it can still be interesting to see which counties have the higher values and we could also consider this limit as obsolete since its very old.
 
@@ -364,18 +384,6 @@ For the next step which is graphing, we're going to regroup the different counti
 NB : We remove Puerto Rico here the explanation is in the Research question in a Note at the end 
 
 ```{r}
-education <- education |> 
-  mutate (num_bachelors_or_more = `Estimate!!Total:!!Bachelor's degree` +
-            `Estimate!!Total:!!Master's degree` +
-            `Estimate!!Total:!!Professional school degree` +
-            `Estimate!!Total:!!Doctorate degree`)
-
-clean_education <- education |>
-  select (geo_ID,
-          `Geographic Area Name`,
-          `Estimate!!Total:`,
-          num_bachelors_or_more) |>
-  mutate (ratio = num_bachelors_or_more/`Estimate!!Total:`)
 
 joined_data <- joined_data |>
   rename(pollutant        = `Pollutant Standard`,
@@ -427,15 +435,6 @@ Here we want to see if there is a visible correlation between the income and the
 ### Exposure to Ozone and Income
 
 ```{r}
-clean_employment <- employment |>
-  select(geo_ID,
-         `Geographic Area Name`,
-         `Estimate!!Total:!!In labor force:!!Civilian labor force:`,
-         `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
-
-clean_employment <- clean_employment |>
-  mutate(unemployment_rate = `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`/`Estimate!!Total:!!In labor force:!!Civilian labor force:` )
-
 joined_data |>
   filter(pollutant == "Ozone 8-hour 2015") |>
   ggplot(aes(x = as.factor(income_decile))) +
@@ -448,7 +447,8 @@ joined_data |>
   labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Ozone (ppm)",
        caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
-
+Here we can observe that there isn't a real pattern of evolution of the exposure to Ozone depending of wealth since poorer counties aren't particularly more exposed than rich ones and we can understand that since ozone depends on heat and sun expsoure maybe some counties have more concentration of ozone also because of geographical aspects.
+ 
 ### Exposure to Ozone and Race
 
 ```{r}
@@ -464,7 +464,7 @@ joined_data |>
   labs(x = "White share quartile (1 = least white, 4 = most white)", y = "Ozone (ppm)",
        caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
-
+The results of this graph is interesting because we can see a clear correlation of the 4th daily value and share of white people in a county. The counties the less concentrated in white people have highest points that exceeds the national health limit set by the EPA where highly white counties have much lower maximums. The mean is not impacted though but short exposure already matters a lot especially for people with asthma, kids and people exercising outdoor. 
 ## PM25
 
 ### PM25 and Income
@@ -481,7 +481,7 @@ joined_data |>
   labs(x = "Income decile (1 = poorest, 10 = richest)", y = "PM25 (µg/m³)", 
        caption = "Bars: mean PM25" )
 ```
-
+Here we can clearly see that exposure to PM25 is decreasing with wealth and poorest households are facing 1.5 µg/m³ PM25 more than richest ones which can already represent significant health issues.
 ### PM25 and race 
 
 ```{r}
@@ -496,8 +496,9 @@ joined_data |>
   labs(x = "white quartile (1 = least white, 4 = most white)", y = "PM25 (µg/m³)", 
        caption = "Bars: mean PM25")
 ```
-
+Again, counties composed of majority of minorities (non-white inhabitants) are much more exposed to PM25 and closer to the danger limit and we can see that the whitest the county goes the lower the exposure to particles gets.
 ## Nitrogen dioxide
+### NO2 and Income 
 
 ```{r}
 joined_data |>
@@ -510,7 +511,7 @@ joined_data |>
   labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Nitrogene dioxide (ppb)", 
        caption = "Bars: mean NO2" )
 ```
-
+Finally, for nitrogene dioxide we can not infer any correlation between wealth and exposure to NO2 here since the intensity of the exposure doesn't seem to depend on the income of the county.
 ### NO2 and race
 
 ```{r}
@@ -524,4 +525,4 @@ joined_data |>
   labs(x = "white quartile (1 = least white, 4 = most white)", y = "Nitrogene dioxide (ppb)", 
        caption = "Bars: mean NO2" )
 ```
-
+Here in opposition to income we can see a pattern of exposure to NO2 like PM25 as the population get whiter but we are quite far of the danger limit so it's harder to conclude anything. But the correlation is still demonstrative.
