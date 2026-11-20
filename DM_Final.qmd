@@ -1,8 +1,9 @@
 ---
 title: "DM_Final"
 author: "Dylan Pelloquin and Joseph Vurpillot"
-format: html
-
+format:
+  html:
+    embed-resources: true
 ---
 
 # Packages and libraries
@@ -32,14 +33,13 @@ Air pollution is one of the main environmental threats to public health. Fine pa
 
 To answer this question, we are combining two official sources. The EPA's Air Quality System gives us the annual concentrations measured by monitors for three pollutants: ozone, PM2.5 and nitrogen dioxide (refer to our source description for more details). The American Community Survey from the Census Bureau gives us data so we can compute some variable representing the socio-economic profile of each county: median household income, unemployment rate, share of adults with a bachelor's degree or higher, and share of White population (same a dedicated part to the description of our variables is available). Both datasets refer to the same year, 2024, and are linked through a common county identifier : a state code that we constructed manually.
 
-We focus on four dimensions of socio-economic status. Income is the most direct measure of a county's wealth. Unemployment reflects the local economic situation, but it may also capture the industrial structure of a county. Education measures social status and the ability of communities to defend their interests and oppose polluting projects. Finally, the share of White population allows us to test whether racial minorities are more exposed, a central concern of environmental justice research.
+We focus on four measurement of socio-economic status. Income is the most direct and logical signal of a county's wealth. Unemployment is interesting because it captures the industrial structure of a county. Education measures social status, even though it is linked to income and follow the ability of communities to defend their interests and reject polluting projects. Finally, the share of White population allows us to observe if racial minorities are more exposed to environmental injustices.
 
-Our main hypothesis is that poorer, less educated and less White counties are exposed to higher levels of air pollution. However, we expect this relationship to differ across pollutants. NO₂, which comes mainly from traffic, should be strongly linked to urban areas, where minorities are more concentrated. PM2.5 has both local and regional sources and may show a link with income. Ozone, a secondary pollutant formed regionally under sunny and hot conditions, may depend more on climate and geography than on local socio-economic characteristics.
+The starting point we are taking as an hypothesis is that poorer, less educated and less White counties are exposed to higher levels of air pollution. However, we expect this relationship to be significantly different across pollutants since multiple factors comes into a play.
 
-To explore these relationships, we group counties into income deciles and into quartiles of White population share, and compare average pollution levels across groups. We also compare observed concentrations with the legal limits set by the EPA, to assess not only who is more exposed, but also how serious that exposure is.
+To explore these relationships, we group counties into income deciles and into quartiles of White population share, and compare average pollution levels across groups. We also compare observed concentrations with the legal limits set by the EPA, to assess not only who is more exposed, but also how serious that exposure is. 
 
-Our results describe associations, not causal effects. A link between race and pollution, for instance, may partly reflect the fact that large cities are both more diverse and more polluted. Our sample is also limited to counties that have a pollution monitor and more than 65,000 inhabitants, so our conclusions apply mainly to urban and suburban America.
-
+Our results primary aim is to describe interesting relationships rather than causal effects that would take much more time and expertise. A link between race and pollution, for instance, may partly reflect the fact that large cities are both more diverse and more polluted. Our sample is also limited to counties that have a pollution monitor and more than 65,000 inhabitants and where AQS has local agencies that has monitors, so our conclusions apply mainly to urban and suburban America as explained in the description of sources.
 
 NOTE : We got rid of the 3 municpalities of Puerto Rico because it has a very different weather compared to continental USA and that can lead to higher level of pm25 for example. Plus it is not considered as a state of the USA and finally the incomes are significantly lower than in other states so it create a small flaw concerning income deciles.
 
@@ -80,7 +80,7 @@ Socio-economic features :
 
 Air pollution variables :
 
-- Ozone measured with arithmetic mean of 8hour average 2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it is widely measured on monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present coming from emissions of  vehicles and industry in sunlight. We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
+- Ozone measured with arithmetic mean of 8hour average 2015 standard as reference in parts per million, we chose this variable to partly represent pollution in counties because first of all it is widely measured on monitors so it allows us to really have a vast view. But also it’s a very impacting gas for human health and is very present, it forms in sunlight from vehicle and industrial emissions. We’re going to compare it to the 4th highest daily maximum, the official EPA measure for the ozone standard (0.070 ppm) set in 2015.
 
 - Another variable we will focus on is the annual arithmetic mean of long term exposure to PM25 particles (representing fine particulate matter). It’s the most harmful air pollutant especially causing heart and respiratory diseases. It comes from traffic, power plants and industrial production. There are less monitors measuring PM25 but there still are around 900 values observed in all the counties. We will directly compare it withe the EPA standard of 9µg/m\^3.
 
@@ -432,7 +432,7 @@ joined_data <- joined_data |>
 ```
 
 
-# Breve description of the final data
+# Brief description of the final data
 
 |                   |                       |
 |-------------------|-----------------------|
