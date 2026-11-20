@@ -178,7 +178,7 @@ population <- cleaning_ACS(population) |>
   select(!4) #full of NA
 ```
 
-# Breve description of the data
+# Breve description of the raw data
 
 ## EPA Data
 
@@ -236,7 +236,7 @@ population <- cleaning_ACS(population) |>
 
 : Basic information about population ACS data
 
-# Data joining and cleaning
+# Data cleaning and joining
 
 ## Harmonizing the format of geo_Ids
 
@@ -244,9 +244,8 @@ In order to join the data, it is essential first to work with our key variable u
 
 In EPA Data, we have a State code and a County Code (1, 24 or 456 for instance). In ACS Data we have a unique geo_id in which we have the unite State code and County Code in that order. However, for State codes, 1 must become 01, and for County Codes 1 must become 001. As it is pretty difficult, we will compute a new geo_ID for both datasets, under the following format : S1C23, S20C330, S8C9 (what follows S is the State Code and what follows C is the County Code). Without S and C, geo_ID for State 1 and County 12 would be the same than geo_ID for State 11 and County 2.
 
-<<<<<<< HEAD
 In EPA Data, we have two different columns County Name and State Name. In ACS Data, we have one unique column under the following form : County Name, State Name. We then have to split them by "," to obtain two different columns, in order to have the same form in both datasets.
-=======
+
 ### EPA Data
 
 ```{r}
@@ -285,14 +284,14 @@ pollution <- pollution |>
   filter(`Completeness Indicator` == "Y")
 ```
 
-For pollution, we keep only observations of the 3 gases we are interested in.
+For pollution, we keep only observations of the 3 gases we are interested in. (Ozone, PM2.5 and Nitrogen Dioxide).
 
 ```{r}
 pollution <- pollution |>
   filter(`Parameter Name` == "Ozone" | `Parameter Name` == "PM2.5 - Local Conditions" | `Parameter Name` == "Nitrogen dioxide (NO2)")
 ```
 
-We keep the variables that we judge relevant.
+We keep the variables that we judge relevant for our study.
 
 ```{r}
 pollution <- pollution |>
@@ -329,11 +328,11 @@ education <- education |>  mutate (num_bachelors_or_more=`Estimate!!Total:!!Bach
                               `Estimate!!Total:!!Master's degree` +
                               `Estimate!!Total:!!Professional school degree` +
                               `Estimate!!Total:!!Doctorate degree`)
-clean_education<- education |> select (geo_ID,`Geographic Area Name`,`Estimate!!Total:`, num_bachelors_or_more)
+clean_education <- education |> select (geo_ID,`Geographic Area Name`,`Estimate!!Total:`, num_bachelors_or_more)
 clean_education <- clean_education |> mutate (ratio= num_bachelors_or_more/`Estimate!!Total:`)
 ```
 
 ```{r}
-clean_employment<- employment |> select(geo_ID, `Geographic Area Name`, `Estimate!!Total:!!In labor force:!!Civilian labor force:`, `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
+clean_employment <- employment |> select(geo_ID, `Geographic Area Name`, `Estimate!!Total:!!In labor force:!!Civilian labor force:`, `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
 clean_employment <- clean_employment |> mutate(unemployment_rate=`Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`/`Estimate!!Total:!!In labor force:!!Civilian labor force:` )
 ```
