@@ -1,12 +1,15 @@
 ---
 title: "DM_Final"
 author: "Dylan Pelloquin and Joseph Vurpillot"
-format: typst
+format: html
+
 ---
 
 # Packages and librairies
 
 ```{r}
+#| message: false
+#| warning: false
 library(here)
 library(vroom)
 library(dplyr)
@@ -283,7 +286,7 @@ pollution <- pollution |>
 ```
 
 For pollution, we keep only observations of the 3 pollutants that we are interested in : OZONE, PM25 and Nitrogen Dioxide and we pick one measurement method for each : 
-- 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days at the 4th one we consider it's not exceptional
+- 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days, at the 4th one we consider it's not exceptional
 - Annual average based on daily exposure for PM25 with the 2024 threshold health level : 9.0 µg/m³ determined by the EPA 
 - Annual average based on hourly measurment for Nitrgen dioxide with a limit set at 53 ppb in 1972. This gas effect is more complex to measure because we will see that actually our observations never reach this limit but it can still be interesting to see which counties have the higher values and we could also consider this limit as obsolete since its very old.
 
@@ -444,7 +447,8 @@ joined_data |>
   labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Ozone (ppm)",
        caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
-
+Here we can observe that there isn't a real pattern of evolution of the exposure to Ozone depending of wealth since poorer counties aren't particularly more exposed than rich ones and we can understand that since ozone depends on heat and sun expsoure maybe some counties have more concentration of ozone also because of geographical aspects.
+ 
 ### Exposure to Ozone and Race
 
 ```{r}
@@ -460,7 +464,7 @@ joined_data |>
   labs(x = "White share quartile (1 = least white, 4 = most white)", y = "Ozone (ppm)",
        caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
-
+The results of this graph is interesting because we can see a clear correlation of the 4th daily value and share of white people in a county. The counties the less concentrated in white people have highest points that exceeds the national health limit set by the EPA where highly white counties have much lower maximums. The mean is not impacted though but short exposure already matters a lot especially for people with asthma, kids and people exercising outdoor. 
 ## PM25
 
 ### PM25 and Income
@@ -477,7 +481,7 @@ joined_data |>
   labs(x = "Income decile (1 = poorest, 10 = richest)", y = "PM25 (µg/m³)", 
        caption = "Bars: mean PM25" )
 ```
-
+Here we can clearly see that exposure to PM25 is decreasing with wealth and poorest households are facing 1.5 µg/m³ PM25 more than richest ones which can already represent significant health issues.
 ### PM25 and race 
 
 ```{r}
@@ -492,7 +496,7 @@ joined_data |>
   labs(x = "white quartile (1 = least white, 4 = most white)", y = "PM25 (µg/m³)", 
        caption = "Bars: mean PM25")
 ```
-
+Again, counties composed of majority of minorities (non-white inhabitants) are much more exposed to PM25 and closer to the danger limit and we can see that the whitest the county goes the lower the exposure to particles gets.
 ## Nitrogen dioxide
 ### NO2 and Income 
 
@@ -507,7 +511,7 @@ joined_data |>
   labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Nitrogene dioxide (ppb)", 
        caption = "Bars: mean NO2" )
 ```
-
+Finally, for nitrogene dioxide we can not infer any correlation between wealth and exposure to NO2 here since the intensity of the exposure doesn't seem to depend on the income of the county.
 ### NO2 and race
 
 ```{r}
@@ -521,4 +525,4 @@ joined_data |>
   labs(x = "white quartile (1 = least white, 4 = most white)", y = "Nitrogene dioxide (ppb)", 
        caption = "Bars: mean NO2" )
 ```
-
+Here in opposition to income we can see a pattern of exposure to NO2 like PM25 as the population get whiter but we are quite far of the danger limit so it's harder to conclude anything. But the correlation is still demonstrative.
