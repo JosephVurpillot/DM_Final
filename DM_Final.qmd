@@ -410,7 +410,8 @@ joined_data <- joined_data |>
 # decile creation, we are being careful to only count each county once 
 income_groups <- joined_data |>
   distinct(geo_ID, median_income) |>              
-  mutate(income_decile = ntile(median_income, 10))
+  mutate(income_decile = ntile(median_income, 10)) |>
+  select(geo_ID, income_decile)
 
 joined_data <- joined_data |>
   inner_join(income_groups, by = join_by(`geo_ID`))
@@ -420,7 +421,8 @@ joined_data <- joined_data |>
 white_groups <- joined_data |>
   distinct(geo_ID, share_white) |>
   filter(!is.na(share_white)) |>
-  mutate(white_quartile = ntile(share_white, 4))
+  mutate(white_quartile = ntile(share_white, 4)) |>
+  select(geo_ID, white_quartile)
 
 joined_data <- joined_data |>
   inner_join(white_groups, by = join_by(`geo_ID`))
