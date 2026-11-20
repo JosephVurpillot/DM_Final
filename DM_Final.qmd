@@ -351,7 +351,6 @@ race <- race |>
   mutate(share_of_white_people = `Estimate!!Total:!!White alone`/`Estimate!!Total:`)
 ```
 
-
 ```{r}
 ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
   inner_join(race, by = join_by(`geo_ID`)) |>
