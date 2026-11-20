@@ -25,6 +25,7 @@ library(stringr)
 #| warning: false
 here::i_am("DM_Final.Rproj")
 ```
+
 # Research Question 
 
 Air pollution is one of the main environmental threats to public health. Fine particles, ozone and nitrogen dioxide are linked to respiratory and cardiovascular diseases and premature death. Yet these pollutants are not distributed evenly across the territory. Their sources (road traffic, power plants, industrial sites, major roads) are concentrated in some places rather than others, and the decisions about where to locate them may reflect the socio-economic environment of the surrounding population. In the United States, a large body of research on environmental justice has shown that low-income communities and racial minorities often live closer to pollution sources.  And it is what we are goin to try to demonstrate as well. Our project investigate whether a pattern can still be observed at the county level in 2024 in the USA.
@@ -353,7 +354,7 @@ education <- education |>
   mutate (ratio = num_bachelors_or_more/`Estimate!!Total:`)
 ```
 
-We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
+We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the total labor force giving us the unemployment rate per county. 
 
 ```{r}
 employment <- employment |>
@@ -373,6 +374,8 @@ race <- race |>
   mutate(share_of_white_people = `Estimate!!Total:!!White alone`/`Estimate!!Total:`)
 ```
 
+## Joining the data
+
 ```{r}
 ACS <- inner_join(education, employment, by = join_by(`geo_ID`)) |>
   inner_join(race, by = join_by(`geo_ID`)) |>
@@ -386,7 +389,6 @@ For the next step which is graphing, we're going to regroup the different counti
 NB : We remove Puerto Rico here the explanation is in the Research question in a Note at the end 
 
 ```{r}
-
 joined_data <- joined_data |>
   rename(pollutant        = `Pollutant Standard`,
          mean_value       = `Arithmetic Mean`,
@@ -412,7 +414,8 @@ joined_data <- joined_data |>
 # decile creation, we are being careful to only count each county once 
 income_groups <- joined_data |>
   distinct(geo_ID, median_income) |>              
-  mutate(income_decile = ntile(median_income, 10))
+  mutate(income_decile = ntile(median_income, 10)) |>
+  select(geo_ID, income_decile)
 
 joined_data <- joined_data |>
   inner_join(income_groups, by = join_by(`geo_ID`))
@@ -421,11 +424,22 @@ joined_data <- joined_data |>
 white_groups <- joined_data |>
   distinct(geo_ID, share_white) |>
   filter(!is.na(share_white)) |>
-  mutate(white_quartile = ntile(share_white, 4))
+  mutate(white_quartile = ntile(share_white, 4)) |>
+  select(geo_ID, white_quartile)
 
 joined_data <- joined_data |>
   inner_join(white_groups, by = join_by(`geo_ID`))
 ```
+
+
+# Breve description of the final data
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(joined_data)` |
+| Number of columns | `{r} ncol(joined_data)` |
+
+: Basic information about pollution EPA data
 
 # Graphs 
 
@@ -439,13 +453,23 @@ Here we want to see if there is a visible correlation between the income and the
 joined_data |>
   filter(pollutant == "Ozone 8-hour 2015") |>
   ggplot(aes(x = as.factor(income_decile))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "steelblue") +
-  stat_summary(aes(y = max4_value), fun = mean, geom = "point", size = 3) +
-  geom_hline(yintercept = 0.07, linetype = "dotted", colour = "red") +
-  annotate("text", x = 5, y = .073, hjust = 0,
+  stat_summary(aes(y = mean_value),
+               fun = mean, geom = "col",
+               fill = "steelblue") +
+  stat_summary(aes(y = max4_value),
+               fun = mean, geom = "point",
+               size = 3) +
+  geom_hline(yintercept = 0.07,
+             linetype = "dotted",
+             colour = "red") +
+  annotate("text",
+           x = 5,
+           y = .073,
+           hjust = 0,
            label = "0.07 ppm danger limit fixed by the EPA") +
   coord_cartesian(ylim = c(0.035, 0.08)) +
-  labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Ozone (ppm)",
+  labs(x = "Income decile (1 = poorest, 10 = richest)",
+       y = "Ozone (ppm)",
        caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
 Here we can observe that there isn't a real pattern of evolution of the exposure to Ozone depending of wealth since poorer counties aren't particularly more exposed than rich ones and we can understand that since ozone depends on heat and sun expsoure maybe some counties have more concentration of ozone also because of geographical aspects.
@@ -456,16 +480,28 @@ Here we can observe that there isn't a real pattern of evolution of the exposure
 joined_data |>
   filter(pollutant == "Ozone 8-hour 2015") |>
   ggplot(aes(x = as.factor(white_quartile))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "darkorange") +
-  stat_summary(aes(y = max4_value), fun = mean, geom = "point", size = 3) +
-  geom_hline(yintercept = 0.07, linetype = "dotted", colour = "red") +
-  annotate("text", x = 1, y = .073, hjust = 0,
+  stat_summary(aes(y = mean_value),
+               fun = mean, geom = "col",
+               fill = "darkorange") +
+  stat_summary(aes(y = max4_value),
+               fun = mean,
+               geom = "point",
+               size = 3) +
+  geom_hline(yintercept = 0.07,
+             linetype = "dotted",
+             colour = "red") +
+  annotate("text",
+           x = 1,
+           y = .073,
+           hjust = 0,
            label = "0.07 ppm danger limit fixed by the EPA") +
   coord_cartesian(ylim = c(0.035, 0.08)) +
-  labs(x = "White share quartile (1 = least white, 4 = most white)", y = "Ozone (ppm)",
+  labs(x = "White share quartile (1 = least white, 4 = most white)",
+       y = "Ozone (ppm)",
        caption = "Bars: mean ozone · Points: mean 4th highest daily value")
 ```
-The results of this graph is interesting because we can see a clear correlation of the 4th daily value and share of white people in a county. The counties the less concentrated in white people have highest points that exceeds the national health limit set by the EPA where highly white counties have much lower maximums. The mean is not impacted though but short exposure already matters a lot especially for people with asthma, kids and people exercising outdoor. 
+The results of this graph is interesting because we can see a clear correlation of the 4th daily value and share of white people in a county. The counties the less concentrated in white people have highest points that exceeds the national health limit set by the EPA where highly white counties have much lower maximums. The mean is not impacted though but short exposure already matters a lot especially for people with asthma, kids and people exercising outdoor.
+
 ## PM25
 
 ### PM25 and Income
@@ -474,13 +510,21 @@ The results of this graph is interesting because we can see a clear correlation 
 joined_data |>
   filter(pollutant == "PM25 Annual 2024") |>
   ggplot(aes(x = as.factor(income_decile))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "steelblue") +
-  geom_hline(yintercept = 9, linetype = "dotted", colour = "red") +
-    annotate("text", x = 5, y = 9.5, hjust = 0,
-               label = "9 µg/m³, danger limit fixed by the EPA")+
+  stat_summary(aes(y = mean_value),
+               fun = mean, geom = "col",
+               fill = "steelblue") +
+  geom_hline(yintercept = 9,
+             linetype = "dotted",
+             colour = "red") +
+    annotate("text",
+             x = 5,
+             y = 9.5,
+             hjust = 0,
+             label = "9 µg/m³, danger limit fixed by the EPA")+
   coord_cartesian(ylim = c(5, 9.5)) +
-  labs(x = "Income decile (1 = poorest, 10 = richest)", y = "PM25 (µg/m³)", 
-       caption = "Bars: mean PM25" )
+  labs(x = "Income decile (1 = poorest, 10 = richest)",
+       y = "PM25 (µg/m³)", 
+       caption = "Bars: mean PM25")
 ```
 Here we can clearly see that exposure to PM25 is decreasing with wealth and poorest households are facing 1.5 µg/m³ PM25 more than richest ones which can already represent significant health issues.
 
@@ -490,12 +534,21 @@ Here we can clearly see that exposure to PM25 is decreasing with wealth and poor
 joined_data |>
   filter(pollutant == "PM25 Annual 2024") |>
   ggplot(aes(x = as.factor(white_quartile))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "darkorange") +
-  geom_hline(yintercept = 9, linetype = "dotted", colour = "red") +
-    annotate("text", x = 2, y = 9.5, hjust = 0,
-               label = "9 µg/m³, danger limit fixed by the EPA")+
+  stat_summary(aes(y = mean_value),
+               fun = mean,
+               geom = "col",
+               fill = "darkorange") +
+  geom_hline(yintercept = 9,
+             linetype = "dotted",
+             colour = "red") +
+    annotate("text",
+             x = 2,
+             y = 9.5,
+             hjust = 0,
+             label = "9 µg/m³, danger limit fixed by the EPA")+
   coord_cartesian(ylim = c(5, 9.5)) +
-  labs(x = "white quartile (1 = least white, 4 = most white)", y = "PM25 (µg/m³)", 
+  labs(x = "white quartile (1 = least white, 4 = most white)",
+       y = "PM25 (µg/m³)", 
        caption = "Bars: mean PM25")
 ```
 Again, counties composed of majority of minorities (non-white inhabitants) are much more exposed to PM25 and closer to the danger limit and we can see that the whitest the county goes the lower the exposure to particles gets.
@@ -508,12 +561,21 @@ Again, counties composed of majority of minorities (non-white inhabitants) are m
 joined_data |>
   filter(pollutant == "NO2 Annual 1971") |>
   ggplot(aes(x = as.factor(income_decile))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "steelblue") +
-  geom_hline(yintercept = 53, linetype = "dotted", colour = "red") +
-    annotate("text", x = 5, y = 54, hjust = 0,
-               label = "53 ppb, danger limit fixed by the EPA")+
-  labs(x = "Income decile (1 = poorest, 10 = richest)", y = "Nitrogene dioxide (ppb)", 
-       caption = "Bars: mean NO2" )
+  stat_summary(aes(y = mean_value),
+               fun = mean,
+               geom = "col",
+               fill = "steelblue") +
+  geom_hline(yintercept = 53,
+             linetype = "dotted",
+             colour = "red") +
+    annotate("text",
+             x = 5,
+             y = 54,
+             hjust = 0,
+             label = "53 ppb, danger limit fixed by the EPA")+
+  labs(x = "Income decile (1 = poorest, 10 = richest)",
+       y = "Nitrogene dioxide (ppb)", 
+       caption = "Bars: mean NO2")
 ```
 Finally, for nitrogene dioxide we can not infer any correlation between wealth and exposure to NO2 here since the intensity of the exposure doesn't seem to depend on the income of the county.
 
@@ -523,11 +585,20 @@ Finally, for nitrogene dioxide we can not infer any correlation between wealth a
 joined_data |>
   filter(pollutant == "NO2 Annual 1971") |>
   ggplot(aes(x = as.factor(white_quartile))) +
-  stat_summary(aes(y = mean_value), fun = mean, geom = "col", fill = "darkorange") +
-  geom_hline(yintercept = 53, linetype = "dotted", colour = "red") +
-    annotate("text", x = 2, y = 47, hjust = 0,
-               label = "53 ppb, danger limit fixed by the EPA")+
-  labs(x = "white quartile (1 = least white, 4 = most white)", y = "Nitrogene dioxide (ppb)", 
-       caption = "Bars: mean NO2" )
+  stat_summary(aes(y = mean_value),
+               fun = mean,
+               geom = "col",
+               fill = "darkorange") +
+  geom_hline(yintercept = 53,
+             linetype = "dotted",
+             colour = "red") +
+    annotate("text",
+             x = 2,
+             y = 47,
+             hjust = 0,
+             label = "53 ppb, danger limit fixed by the EPA")+
+  labs(x = "white quartile (1 = least white, 4 = most white)",
+       y = "Nitrogene dioxide (ppb)", 
+       caption = "Bars: mean NO2")
 ```
 Here in opposition to income we can see a pattern of exposure to NO2 like PM25 as the population get whiter but we are quite far of the danger limit so it's harder to conclude anything. But the correlation is still demonstrative.
