@@ -426,6 +426,16 @@ joined_data <- joined_data |>
   inner_join(white_groups, by = join_by(`geo_ID`))
 ```
 
+
+# Breve description of the final data
+
+|                   |                       |
+|-------------------|-----------------------|
+| Number of rows    | `{r} nrow(joined_data)` |
+| Number of columns | `{r} ncol(joined_data)` |
+
+: Basic information about pollution EPA data
+
 # Graphs 
 
 Here we want to see if there is a visible correlation between the income and the race and exposure to the different pollutant.
