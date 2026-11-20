@@ -331,7 +331,7 @@ education <- education |>
   mutate (ratio = num_bachelors_or_more/`Estimate!!Total:`)
 ```
 
-We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the tota labor force giving us the unemployment rate per county. 
+We also start taking only the total civilian labor force and the unemployed in the labor force so that we have everything to construct a rigorous unemployment rate plus the geographical info. And we simply divide the unemployed population by the total labor force giving us the unemployment rate per county. 
 
 ```{r}
 employment <- employment |>
