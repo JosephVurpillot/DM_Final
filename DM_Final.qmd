@@ -1,7 +1,7 @@
 ---
 title: "DM_Final"
 author: "Dylan Pelloquin and Joseph Vurpillot"
-format: html
+format: typst
 ---
 
 # Packages and librairies
@@ -20,6 +20,23 @@ library(stringr)
 ```{r}
 here::i_am("DM_Final.Rproj")
 ```
+# Research Question 
+
+Air pollution is one of the main environmental threats to public health. Fine particles, ozone and nitrogen dioxide are linked to respiratory and cardiovascular diseases and premature death. Yet these pollutants are not distributed evenly across the territory. Their sources (road traffic, power plants, industrial sites, major roads) are concentrated in some places rather than others, and the decisions about where to locate them may reflect the socio-economic environment of the surrounding population. In the United States, a large body of research on environmental justice has shown that low-income communities and racial minorities often live closer to pollution sources.  And it is what we are goin to try to demonstrate as well. Our project investigate whether a pattern can still be observed at the county level in 2024 in the USA.
+
+To answer this question, we are combining two official sources. The EPA's Air Quality System gives us the annual concentrations measured by monitors for three pollutants: ozone, PM2.5 and nitrogen dioxide (refer to our source description for more details). The American Community Survey from the Census Bureau gives us data so we can compute some variable representing the socio-economic profile of each county: median household income, unemployment rate, share of adults with a bachelor's degree or higher, and share of White population (same a dedicated part to the description of our variables is available). Both datasets refer to the same year, 2024, and are linked through a common county identifier : a state code that we constructed manually.
+
+We focus on four dimensions of socio-economic status. Income is the most direct measure of a county's wealth. Unemployment reflects the local economic situation, but it may also capture the industrial structure of a county. Education measures social status and the ability of communities to defend their interests and oppose polluting projects. Finally, the share of White population allows us to test whether racial minorities are more exposed, a central concern of environmental justice research.
+
+Our main hypothesis is that poorer, less educated and less White counties are exposed to higher levels of air pollution. However, we expect this relationship to differ across pollutants. NO₂, which comes mainly from traffic, should be strongly linked to urban areas, where minorities are more concentrated. PM2.5 has both local and regional sources and may show a link with income. Ozone, a secondary pollutant formed regionally under sunny and hot conditions, may depend more on climate and geography than on local socio-economic characteristics.
+
+To explore these relationships, we group counties into income deciles and into quartiles of White population share, and compare average pollution levels across groups. We also compare observed concentrations with the legal limits set by the EPA, to assess not only who is more exposed, but also how serious that exposure is.
+
+Our results describe associations, not causal effects. A link between race and pollution, for instance, may partly reflect the fact that large cities are both more diverse and more polluted. Our sample is also limited to counties that have a pollution monitor and more than 65,000 inhabitants, so our conclusions apply mainly to urban and suburban America.
+
+
+NOTE : We got rid of the 4 counties of Puerto Rico because it has a very different weather compared to continental USA and that can lead to higher level of pm25 for example. Plus it is not considered as a state of the USA and finally the incomes are significantly lower than in other states so it create a small flaw concerning income deciles.
+
 # Links to Git hub
 
 https://github.com/JosephVurpillot/DM_Final.git
@@ -364,18 +381,6 @@ For the next step which is graphing, we're going to regroup the different counti
 NB : We remove Puerto Rico here the explanation is in the Research question in a Note at the end 
 
 ```{r}
-education <- education |> 
-  mutate (num_bachelors_or_more = `Estimate!!Total:!!Bachelor's degree` +
-            `Estimate!!Total:!!Master's degree` +
-            `Estimate!!Total:!!Professional school degree` +
-            `Estimate!!Total:!!Doctorate degree`)
-
-clean_education <- education |>
-  select (geo_ID,
-          `Geographic Area Name`,
-          `Estimate!!Total:`,
-          num_bachelors_or_more) |>
-  mutate (ratio = num_bachelors_or_more/`Estimate!!Total:`)
 
 joined_data <- joined_data |>
   rename(pollutant        = `Pollutant Standard`,
@@ -427,15 +432,6 @@ Here we want to see if there is a visible correlation between the income and the
 ### Exposure to Ozone and Income
 
 ```{r}
-clean_employment <- employment |>
-  select(geo_ID,
-         `Geographic Area Name`,
-         `Estimate!!Total:!!In labor force:!!Civilian labor force:`,
-         `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`)
-
-clean_employment <- clean_employment |>
-  mutate(unemployment_rate = `Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed`/`Estimate!!Total:!!In labor force:!!Civilian labor force:` )
-
 joined_data |>
   filter(pollutant == "Ozone 8-hour 2015") |>
   ggplot(aes(x = as.factor(income_decile))) +
@@ -498,6 +494,7 @@ joined_data |>
 ```
 
 ## Nitrogen dioxide
+### NO2 and Income 
 
 ```{r}
 joined_data |>
