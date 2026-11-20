@@ -5,7 +5,7 @@ format: html
 
 ---
 
-# Packages and librairies
+# Packages and libraries
 
 ```{r}
 #| message: false
@@ -21,6 +21,8 @@ library(stringr)
 # Here configuration
 
 ```{r}
+#| message: false
+#| warning: false
 here::i_am("DM_Final.Rproj")
 ```
 # Research Question 
@@ -38,9 +40,9 @@ To explore these relationships, we group counties into income deciles and into q
 Our results describe associations, not causal effects. A link between race and pollution, for instance, may partly reflect the fact that large cities are both more diverse and more polluted. Our sample is also limited to counties that have a pollution monitor and more than 65,000 inhabitants, so our conclusions apply mainly to urban and suburban America.
 
 
-NOTE : We got rid of the 4 counties of Puerto Rico because it has a very different weather compared to continental USA and that can lead to higher level of pm25 for example. Plus it is not considered as a state of the USA and finally the incomes are significantly lower than in other states so it create a small flaw concerning income deciles.
+NOTE : We got rid of the 3 municpalities of Puerto Rico because it has a very different weather compared to continental USA and that can lead to higher level of pm25 for example. Plus it is not considered as a state of the USA and finally the incomes are significantly lower than in other states so it create a small flaw concerning income deciles.
 
-# Links to Git hub
+# Link to Github
 
 https://github.com/JosephVurpillot/DM_Final.git
 
@@ -179,7 +181,7 @@ population <- cleaning_ACS(population) |>
   select(!4) #full of NA
 ```
 
-# Breve description of the raw data
+# Brief description of the raw data
 
 ## EPA Data
 
@@ -217,7 +219,7 @@ population <- cleaning_ACS(population) |>
 | Number of rows    | `{r} nrow(race)` |
 | Number of columns | `{r} ncol(race)` |
 
-: Basic information about education ACS data
+: Basic information about race ACS data
 
 ### Median income
 
@@ -288,7 +290,7 @@ pollution <- pollution |>
 For pollution, we keep only observations of the 3 pollutants that we are interested in : OZONE, PM25 and Nitrogen Dioxide and we pick one measurement method for each : 
 - 8 hour measurement of ozone averaged of OZONE and we need the arithmetic mean and the 4th MAX value. Ozone is basically measured in peaks so we only take the 4th max because we want to allow extreme days (like a very hot day for example) in the year but we only tolerate 3 days, at the 4th one we consider it's not exceptional
 - Annual average based on daily exposure for PM25 with the 2024 threshold health level : 9.0 µg/m³ determined by the EPA 
-- Annual average based on hourly measurment for Nitrgen dioxide with a limit set at 53 ppb in 1972. This gas effect is more complex to measure because we will see that actually our observations never reach this limit but it can still be interesting to see which counties have the higher values and we could also consider this limit as obsolete since its very old.
+- Annual average based on hourly measurment for Nitrgen dioxide with a limit set at 53 ppb in 1971. This gas effect is more complex to measure because we will see that actually our observations never reach this limit but it can still be interesting to see which counties have the higher values and we could also consider this limit as obsolete since its very old.
 
 ```{r}
 pollution <- pollution |>
@@ -415,8 +417,7 @@ income_groups <- joined_data |>
 joined_data <- joined_data |>
   inner_join(income_groups, by = join_by(`geo_ID`))
 
-# creation of the dummy variable, again we count only once each county
-# White share per income decile (each county counted once)
+# creation of the white quartiles, again we count only once each county
 white_groups <- joined_data |>
   distinct(geo_ID, share_white) |>
   filter(!is.na(share_white)) |>
@@ -428,7 +429,7 @@ joined_data <- joined_data |>
 
 # Graphs 
 
-Here we want to see if there is a visible correlation between the income and the race and exposure to the different pollutant.
+Here we want to see if there is a visible correlation between the income and the race and exposure to differents pollutants.
 
 ## Ozone
 
@@ -482,6 +483,7 @@ joined_data |>
        caption = "Bars: mean PM25" )
 ```
 Here we can clearly see that exposure to PM25 is decreasing with wealth and poorest households are facing 1.5 µg/m³ PM25 more than richest ones which can already represent significant health issues.
+
 ### PM25 and race 
 
 ```{r}
@@ -497,7 +499,9 @@ joined_data |>
        caption = "Bars: mean PM25")
 ```
 Again, counties composed of majority of minorities (non-white inhabitants) are much more exposed to PM25 and closer to the danger limit and we can see that the whitest the county goes the lower the exposure to particles gets.
+
 ## Nitrogen dioxide
+
 ### NO2 and Income 
 
 ```{r}
@@ -512,6 +516,7 @@ joined_data |>
        caption = "Bars: mean NO2" )
 ```
 Finally, for nitrogene dioxide we can not infer any correlation between wealth and exposure to NO2 here since the intensity of the exposure doesn't seem to depend on the income of the county.
+
 ### NO2 and race
 
 ```{r}
